@@ -50,5 +50,11 @@ All commands must have a `Name() string`, `Description() string` and `Run(contex
 The type of the command will be determine by the functions defined:
 
 `Command` has `SubCommands() *[]SubCommand` and `SubCommandGroups() *[]SubCommandGroup`
+
 `SubCommandGroup` has `SubCommands() *[]SubCommand`
+
 `SubCommand` has none
+
+...so basically the above was scrapped because using interfaces doesnt work the best for this. It now uses structs and is fully working, I hope atleast...
+
+..next we are on to storage of commands which should be simple enough
