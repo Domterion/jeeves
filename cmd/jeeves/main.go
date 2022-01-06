@@ -8,7 +8,6 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/domterion/jeeves/cmd/jeeves/commands"
 	"github.com/domterion/jeeves/common/config"
-	"github.com/domterion/jeeves/handler"
 )
 
 func main() {
@@ -26,16 +25,31 @@ func main() {
 		log.Println("Bot is ready!")
 	})
 
-	handler.GetType(&commands.PingCommand{});
-	handler.GetType(&commands.OwnerCommand{});
-	handler.GetType(&commands.OwnerSayCommand{});
-	
 	err = discord.Open()
 	if err != nil {
 		log.Fatalf("Failed to open session: %v", err)
 	}
 
 	defer discord.Close()
+
+	ownercommand := commands.OwnerCommand.ToApplicationCommand()
+	pingcommand := commands.PingCommand.ToApplicationCommand()
+	userinfocommand := commands.UserInfoCommand.ToApplicationCommand()
+
+	_, err = discord.ApplicationCommandCreate(discord.State.User.ID, "897619857187676210", ownercommand)
+	if err != nil {
+		log.Fatalf("Failed to register owner command: %v", err)
+	}
+
+	_, err = discord.ApplicationCommandCreate(discord.State.User.ID, "897619857187676210", pingcommand)
+	if err != nil {
+		log.Fatalf("Failed to register ping command: %v", err)
+	}
+
+	_, err = discord.ApplicationCommandCreate(discord.State.User.ID, "897619857187676210", userinfocommand)
+	if err != nil {
+		log.Fatalf("Failed to register userinfo command: %v", err)
+	}
 
 	stop := make(chan os.Signal)
 	signal.Notify(stop, os.Interrupt)

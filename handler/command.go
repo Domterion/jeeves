@@ -1,64 +1,96 @@
 package handler
 
 import (
-	"errors"
+	"fmt"
 	"log"
 
 	"github.com/bwmarrin/discordgo"
 )
 
-/*
-Base functions for slash commands
-*/
-type BaseCommand interface {
-	Name() string                                   // A function to get the name of the command to register with Discord
-	Description() string                            // A function to get the description of the slash command
-	Type() discordgo.ApplicationCommandType         // A function to get the type of the command
-	Options() []*discordgo.ApplicationCommandOption // A function to get all the command options
+type Runnable func(context *Context) error
 
-	Run(context *Context) error // The handler function for the command
+type BaseCommand struct {
+	Name        string                                // The name of the command to register with Discord
+	Description string                                // The description for the command
+	Type        discordgo.ApplicationCommandType      // The type of the command, User, Message or Chat
+	Options     []*discordgo.ApplicationCommandOption // Options for the command
+	Run         Runnable                              // The handler function for the command
 }
 
-/*
-A slash command
-*/
-type Command interface {
+type Command struct {
 	BaseCommand
 
-	SubCommands() *[]SubCommand           // A function to get the subcommands for this command
-	SubCommandGroups() *[]SubCommandGroup // A function to get the subcommand groups for this command
+	SubCommands      []*SubCommand
+	SubCommandGroups []*SubCommandGroup
 }
 
-/*
-A subcommand group slash command
-*/
-type SubCommandGroup interface {
-	BaseCommand
-
-	SubCommands() *[]SubCommand // A function to get the subcommands for this subcommand group
-}
-
-/*
-A subcommand slash command
-*/
-type SubCommand interface {
+type SubCommand struct {
 	BaseCommand
 }
 
-func GetType(c interface{}) (interface{}, error) {
-	var t interface{}
+type SubCommandGroup struct {
+	BaseCommand
+	SubCommands []*SubCommand
+}
 
-	switch t := c.(type) {
-	case Command:
-		log.Printf("command type")
-	case SubCommandGroup:
-		log.Printf("subcommandgroup type")
-	case SubCommand:
-		log.Printf("subcommand type")
+func (c Command) ToApplicationCommand() *discordgo.ApplicationCommand {
+	switch c.Type {
+	case discordgo.ChatApplicationCommand:
+
+		var options []*discordgo.ApplicationCommandOption
+
+		for _, subcommandgroup := range c.SubCommandGroups {
+			options = append(options, subcommandgroup.ToOption())
+		}
+
+		for _, subcommand := range c.SubCommands {
+			options = append(options, subcommand.ToOption())
+		}
+
+		options = append(options, c.Options...)
+
+		return &discordgo.ApplicationCommand{
+			Name:        c.Name,
+			Description: c.Description,
+			Options:     options,
+			Type:        discordgo.ChatApplicationCommand,
+		}
+	case discordgo.UserApplicationCommand:
+		return &discordgo.ApplicationCommand{
+			Name: c.Name,
+			Type: discordgo.UserApplicationCommand,
+		}
+	case discordgo.MessageApplicationCommand:
+		return &discordgo.ApplicationCommand{
+			Name: c.Name,
+			Type: discordgo.MessageApplicationCommand,
+		}
 	default:
-		log.Printf("unknown type: %v", t)
-		return "", errors.New("unknown command type")
+		log.Fatal("unknown command type")
+		return nil
+	}
+}
+
+func (c SubCommandGroup) ToOption() *discordgo.ApplicationCommandOption {
+	var subcommands []*discordgo.ApplicationCommandOption
+
+	for _, subcommand := range c.SubCommands {
+		subcommands = append(subcommands, subcommand.ToOption())
 	}
 
-	return t, nil
+	return &discordgo.ApplicationCommandOption{
+		Name:        c.Name,
+		Description: c.Description,
+		Options:     subcommands,
+		Type:        discordgo.ApplicationCommandOptionSubCommandGroup,
+	}
+}
+
+func (c SubCommand) ToOption() *discordgo.ApplicationCommandOption {
+	return &discordgo.ApplicationCommandOption{
+		Name:        c.Name,
+		Description: c.Description,
+		Options:     c.Options,
+		Type:        discordgo.ApplicationCommandOptionSubCommand,
+	}
 }

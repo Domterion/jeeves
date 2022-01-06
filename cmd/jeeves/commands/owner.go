@@ -7,33 +7,19 @@ import (
 	"github.com/domterion/jeeves/handler"
 )
 
-type OwnerCommand struct{}
-
-func (c *OwnerCommand) Name() string {
-	return "owner"
+var OwnerCommand handler.Command = handler.Command{
+	BaseCommand: handler.BaseCommand{
+		Name:        "owner",
+		Description: ".",
+		Type:        discordgo.ChatApplicationCommand,
+		Options:     []*discordgo.ApplicationCommandOption{},
+		Run:         RunOwner,
+	},
+	SubCommands:      []*handler.SubCommand{&OwnerSayCommand, &OwnerStatsCommand},
+	SubCommandGroups: []*handler.SubCommandGroup{&OwnerTestCommand},
 }
 
-func (c *OwnerCommand) Description() string {
-	return "."
-}
-
-func (c *OwnerCommand) SubCommands() *[]handler.SubCommand {
-	return &[]handler.SubCommand{&OwnerSayCommand{}}
-}
-
-func (c *OwnerCommand) SubCommandGroups() *[]handler.SubCommandGroup {
-	return &[]handler.SubCommandGroup{}
-}
-
-func (c *OwnerCommand) Type() discordgo.ApplicationCommandType {
-	return discordgo.ChatApplicationCommand
-}
-
-func (c *OwnerCommand) Options() []*discordgo.ApplicationCommandOption {
-	return []*discordgo.ApplicationCommandOption{}
-}
-
-func (c *OwnerCommand) Run(context *handler.Context) error {
+func RunOwner(context *handler.Context) error {
 	log.Printf("owner command!")
 
 	return nil

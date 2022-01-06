@@ -12,7 +12,7 @@ type config struct {
 var Config config
 
 func Load() error {
-	err := godotenv.Load()
+	err := godotenv.Load("/home/dominic/projects/go/jeeves/.env")
 
 	opts := env.Options{RequiredIfNoDef: true}
 

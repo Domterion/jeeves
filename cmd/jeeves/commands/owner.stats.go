@@ -7,10 +7,10 @@ import (
 	"github.com/domterion/jeeves/handler"
 )
 
-var OwnerSayCommand handler.SubCommand = handler.SubCommand{
+var OwnerStatsCommand handler.SubCommand = handler.SubCommand{
 	BaseCommand: handler.BaseCommand{
-		Name:        "say",
-		Description: "Make me repeat a phrase",
+		Name:        "stats",
+		Description: "Get bot stats",
 		Type:        discordgo.ChatApplicationCommand,
 		Options: []*discordgo.ApplicationCommandOption{
 			{
@@ -19,13 +19,19 @@ var OwnerSayCommand handler.SubCommand = handler.SubCommand{
 				Description: "The phrase to repeat",
 				Required:    true,
 			},
+			{
+				Type:        discordgo.ApplicationCommandOptionChannel,
+				Name:        "channel",
+				Description: "Yes",
+				Required:    false,
+			},
 		},
-		Run: RunOwnerSay,
+		Run: RunOwnerStats,
 	},
 }
 
-func RunOwnerSay(context *handler.Context) error {
-	log.Printf("owner say command!")
+func RunOwnerStats(context *handler.Context) error {
+	log.Printf("owner stats command!")
 
 	return nil
 }
