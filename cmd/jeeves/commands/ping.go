@@ -12,7 +12,14 @@ var PingCommand handler.Command = handler.Command{
 		Name:        "ping",
 		Description: ".",
 		Type:        discordgo.ChatApplicationCommand,
-		Options:     []*discordgo.ApplicationCommandOption{},
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Type:        discordgo.ApplicationCommandOptionBoolean,
+				Name:        "pong",
+				Description: "pong?",
+				Required:    true,
+			},
+		},
 		Run: func(context *handler.Context) error {
 			log.Printf("ping command!")
 

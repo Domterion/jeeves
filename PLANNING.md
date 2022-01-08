@@ -57,4 +57,7 @@ The type of the command will be determine by the functions defined:
 
 ...so basically the above was scrapped because using interfaces doesnt work the best for this. It now uses structs and is fully working, I hope atleast...
 
-..next we are on to storage of commands which should be simple enough
+Next we are on to storage of commands which should be simple enough...
+
+...well, it wasnt as simple as I thought but `interface{}` is beautiful when used properly but now you can call `RegisterCommand` and itll store all commands and subcommands in a `map[string]interface{}`. 
+

@@ -8,6 +8,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/domterion/jeeves/cmd/jeeves/commands"
 	"github.com/domterion/jeeves/common/config"
+	"github.com/domterion/jeeves/handler"
 )
 
 func main() {
@@ -31,6 +32,15 @@ func main() {
 	}
 
 	defer discord.Close()
+
+	commandManager, err := handler.New(discord)
+	if err != nil {
+		log.Fatalf("Failed to create command manager: %v", err)
+	}
+
+	commandManager.AddCommand(commands.OwnerCommand)
+	commandManager.AddCommand(commands.PingCommand)
+	commandManager.AddCommand(commands.UserInfoCommand)
 
 	ownercommand := commands.OwnerCommand.ToApplicationCommand()
 	pingcommand := commands.PingCommand.ToApplicationCommand()
