@@ -10,7 +10,7 @@ import (
 var OwnerStatsCommand handler.SubCommand = handler.SubCommand{
 	BaseCommand: handler.BaseCommand{
 		Name:        "stats",
-		Description: "Get bot stats",
+		Description: "Get bot stats... or something",
 		Type:        discordgo.ChatApplicationCommand,
 		Options: []*discordgo.ApplicationCommandOption{
 			{

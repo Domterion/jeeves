@@ -10,7 +10,7 @@ import (
 var PingCommand handler.Command = handler.Command{
 	BaseCommand: handler.BaseCommand{
 		Name:        "ping",
-		Description: ".",
+		Description: "pong",
 		Type:        discordgo.ChatApplicationCommand,
 		Options: []*discordgo.ApplicationCommandOption{
 			{

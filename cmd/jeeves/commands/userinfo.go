@@ -14,7 +14,7 @@ var UserInfoCommand handler.Command = handler.Command{
 		Options: []*discordgo.ApplicationCommandOption{},
 		Run:     RunUserInfo,
 	},
-	SubCommands:      []*handler.SubCommand{&OwnerSayCommand},
+	SubCommands:      []*handler.SubCommand{},
 	SubCommandGroups: []*handler.SubCommandGroup{},
 }
 

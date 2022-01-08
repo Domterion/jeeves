@@ -61,3 +61,5 @@ Next we are on to storage of commands which should be simple enough...
 
 ...well, it wasnt as simple as I thought but `interface{}` is beautiful when used properly but now you can call `RegisterCommand` and itll store all commands and subcommands in a `map[string]interface{}`. 
 
+the manager now binds to `onReady()` and automatically registers commands on ready!
+
