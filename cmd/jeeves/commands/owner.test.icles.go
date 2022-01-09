@@ -1,8 +1,6 @@
 package commands
 
 import (
-	"log"
-
 	"github.com/bwmarrin/discordgo"
 	"github.com/domterion/jeeves/handler"
 )
@@ -21,7 +19,7 @@ var OwnerTestIclesCommand handler.SubCommand = handler.SubCommand{
 			},
 		},
 		Run: func(context *handler.Context) error {
-			log.Printf("owner say command!")
+			context.RespondText("hehe lewd!")
 
 			return nil
 		},

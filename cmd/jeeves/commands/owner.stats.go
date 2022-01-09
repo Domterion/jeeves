@@ -1,8 +1,6 @@
 package commands
 
 import (
-	"log"
-
 	"github.com/bwmarrin/discordgo"
 	"github.com/domterion/jeeves/handler"
 )
@@ -26,12 +24,10 @@ var OwnerStatsCommand handler.SubCommand = handler.SubCommand{
 				Required:    false,
 			},
 		},
-		Run: RunOwnerStats,
+		Run: func(context *handler.Context) error {
+			context.RespondText("yes")
+
+			return nil
+		},
 	},
-}
-
-func RunOwnerStats(context *handler.Context) error {
-	log.Printf("owner stats command!")
-
-	return nil
 }

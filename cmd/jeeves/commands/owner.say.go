@@ -1,8 +1,6 @@
 package commands
 
 import (
-	"log"
-
 	"github.com/bwmarrin/discordgo"
 	"github.com/domterion/jeeves/handler"
 )
@@ -20,12 +18,10 @@ var OwnerSayCommand handler.SubCommand = handler.SubCommand{
 				Required:    true,
 			},
 		},
-		Run: RunOwnerSay,
+		Run: func(context *handler.Context) error {
+			context.RespondText("template")
+
+			return nil
+		},
 	},
-}
-
-func RunOwnerSay(context *handler.Context) error {
-	log.Printf("owner say command!")
-
-	return nil
 }

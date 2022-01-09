@@ -93,6 +93,8 @@ func (m *Manager) onInteractionCreate(s *discordgo.Session, e *discordgo.Interac
 		Event:           e,
 		Options:         e.ApplicationCommandData().Options,
 		ResolvedOptions: e.ApplicationCommandData().Resolved,
+		Member:          e.Member,
+		User:            e.User,
 	}
 
 	err := commandObject.Run(&context)
