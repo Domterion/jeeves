@@ -70,11 +70,8 @@ func (m *Manager) onReady(s *discordgo.Session, e *discordgo.Ready) {
 
 func (m *Manager) onInteractionCreate(s *discordgo.Session, e *discordgo.InteractionCreate) {
 	name := recurseCommandOptions(e.ApplicationCommandData().Options, e.ApplicationCommandData().Name)
-	fmt.Println(name)
 
 	command, exists := m.commands[name]
-
-	fmt.Println(command)
 
 	if !exists {
 		return
@@ -90,8 +87,6 @@ func (m *Manager) onInteractionCreate(s *discordgo.Session, e *discordgo.Interac
 	case *SubCommand:
 		commandObject = c.BaseCommand
 	}
-
-	fmt.Println(commandObject.Name)
 
 	context := Context{
 		Session:         m.Session,

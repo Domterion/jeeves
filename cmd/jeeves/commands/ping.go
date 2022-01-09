@@ -1,8 +1,6 @@
 package commands
 
 import (
-	"log"
-
 	"github.com/bwmarrin/discordgo"
 	"github.com/domterion/jeeves/handler"
 )
@@ -12,16 +10,9 @@ var PingCommand handler.Command = handler.Command{
 		Name:        "ping",
 		Description: "pong",
 		Type:        discordgo.ChatApplicationCommand,
-		Options: []*discordgo.ApplicationCommandOption{
-			{
-				Type:        discordgo.ApplicationCommandOptionBoolean,
-				Name:        "pong",
-				Description: "pong?",
-				Required:    true,
-			},
-		},
+		Options: []*discordgo.ApplicationCommandOption{},
 		Run: func(context *handler.Context) error {
-			log.Printf("ping command!")
+			context.RespondText("pong!")
 
 			return nil
 		},

@@ -9,3 +9,16 @@ type Context struct {
 	Options         []*discordgo.ApplicationCommandInteractionDataOption // The options the user passed
 	ResolvedOptions *discordgo.ApplicationCommandInteractionDataResolved // Resolved options from Discord such as user and channel options
 }
+
+func (c *Context) Respond(response *discordgo.InteractionResponse) {
+	c.Session.InteractionRespond(c.Event.Interaction, response)
+}
+
+func (c *Context) RespondText(text string) {
+	c.Respond(&discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: text,
+		},
+	})
+}
