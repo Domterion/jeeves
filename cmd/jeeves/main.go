@@ -8,7 +8,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/domterion/jeeves/cmd/jeeves/commands"
 	"github.com/domterion/jeeves/common/config"
-	"github.com/domterion/jeeves/handler"
+	"github.com/domterion/jeeves/commander"
 )
 
 func main() {
@@ -26,7 +26,9 @@ func main() {
 		log.Println("Bot is ready!")
 	})
 
-	commandManager, err := handler.New(discord, "897619857187676210")
+	commandManager, err := commander.New(discord, commander.Options{
+		TestGuild: "897619857187676210",
+	})
 	if err != nil {
 		log.Fatalf("Failed to create command manager: %v", err)
 	}

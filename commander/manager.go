@@ -1,4 +1,6 @@
-package handler
+package commander
+
+// TODO: We need better logging, it should be configurable too
 
 import (
 	"fmt"
@@ -10,15 +12,28 @@ import (
 type Manager struct {
 	Session *discordgo.Session
 	// This has to be an interface{} because we have multiple command types ie Command, *SubCommandGroup and *SubCommand
-	commands  map[string]interface{}
-	testGuild string
+	commands map[string]interface{}
+	options  *Options
 }
 
-func New(session *discordgo.Session, testGuild string) (*Manager, error) {
+type Options struct {
+	TestGuild string // The ID of a guild to register commands to or empty for global
+}
+
+func New(session *discordgo.Session, options ...Options) (*Manager, error) {
 	manager := &Manager{
-		Session:   session,
-		commands:  make(map[string]interface{}),
-		testGuild: testGuild,
+		Session:  session,
+		commands: make(map[string]interface{}),
+	}
+
+	manager.options = &Options{
+		TestGuild: "",
+	}
+
+	if len(options) > 0 {
+		if options[0].TestGuild != "" {
+			manager.options.TestGuild = options[0].TestGuild
+		}
 	}
 
 	manager.Session.AddHandler(manager.onReady)
@@ -31,25 +46,25 @@ func (m *Manager) AddCommand(command Command) {
 	baseCommandName := command.Name
 
 	m.commands[baseCommandName] = command
-	fmt.Printf("Command %s added \n", baseCommandName)
+	//log.Printf("command %s added \n", baseCommandName)
 
 	for _, subcommand := range command.SubCommands {
 		subCommandName := fmt.Sprintf("%s %s", baseCommandName, subcommand.Name)
 		m.commands[subCommandName] = subcommand
-		fmt.Printf("Subcommand %s added \n", subCommandName)
+		//log.Printf("subcommand %s added \n", subCommandName)
 	}
 
 	for _, subcommandgroup := range command.SubCommandGroups {
 		subCommandGroupName := fmt.Sprintf("%s %s", baseCommandName, subcommandgroup.Name)
-		fmt.Printf("On subcommandGroup %s \n", subCommandGroupName)
+		//log.Printf("on subcommandGroup %s \n", subCommandGroupName)
 
 		for _, subcommand := range subcommandgroup.SubCommands {
 			subCommandName := fmt.Sprintf("%s %s", subCommandGroupName, subcommand.Name)
 			m.commands[subCommandName] = subcommand
-			fmt.Printf("Subcommand %s added in group\n", subCommandName)
+			//log.Printf("subcommand %s added in group\n", subCommandName)
 		}
 
-		fmt.Println("END GROUP")
+		//log.Println("end group")
 	}
 }
 
@@ -57,10 +72,10 @@ func (m *Manager) onReady(s *discordgo.Session, e *discordgo.Ready) {
 	for _, command := range m.commands {
 		switch c := command.(type) {
 		case Command:
-			_, err := m.Session.ApplicationCommandCreate(m.Session.State.User.ID, m.testGuild, c.ToApplicationCommand())
+			_, err := m.Session.ApplicationCommandCreate(m.Session.State.User.ID, m.options.TestGuild, c.ToApplicationCommand())
 
 			if err != nil {
-				log.Fatalf("Failed to register %v command: %v", c.Name, err)
+				log.Printf("failed to register %v command: %v", c.Name, err)
 			}
 		}
 
@@ -69,6 +84,17 @@ func (m *Manager) onReady(s *discordgo.Session, e *discordgo.Ready) {
 }
 
 func (m *Manager) onInteractionCreate(s *discordgo.Session, e *discordgo.InteractionCreate) {
+	switch e.Type {
+	case discordgo.InteractionMessageComponent:
+		m.handleMessageComponent(s, e)
+	case discordgo.InteractionApplicationCommand:
+		m.handleApplicationCommand(s, e)
+	default:
+		log.Printf("unsupported interaction type: %v", e.Type)
+	}
+}
+
+func (m *Manager) handleApplicationCommand(s *discordgo.Session, e *discordgo.InteractionCreate) {
 	name := recurseCommandOptions(e.ApplicationCommandData().Options, e.ApplicationCommandData().Name)
 
 	command, exists := m.commands[name]
@@ -103,6 +129,10 @@ func (m *Manager) onInteractionCreate(s *discordgo.Session, e *discordgo.Interac
 		// TODO: Error handling should be informative and customizable
 		return
 	}
+}
+
+func (m *Manager) handleMessageComponent(s *discordgo.Session, e *discordgo.InteractionCreate) {
+	log.Println("message component")
 }
 
 func recurseCommandOptions(options []*discordgo.ApplicationCommandInteractionDataOption, name string) string {

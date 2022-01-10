@@ -1,4 +1,4 @@
-package handler
+package commander
 
 import "github.com/bwmarrin/discordgo"
 

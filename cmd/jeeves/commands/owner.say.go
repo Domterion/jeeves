@@ -2,11 +2,11 @@ package commands
 
 import (
 	"github.com/bwmarrin/discordgo"
-	"github.com/domterion/jeeves/handler"
+	"github.com/domterion/jeeves/commander"
 )
 
-var OwnerSayCommand handler.SubCommand = handler.SubCommand{
-	BaseCommand: handler.BaseCommand{
+var OwnerSayCommand commander.SubCommand = commander.SubCommand{
+	BaseCommand: commander.BaseCommand{
 		Name:        "say",
 		Description: "Make me repeat a phrase",
 		Type:        discordgo.ChatApplicationCommand,
@@ -18,7 +18,7 @@ var OwnerSayCommand handler.SubCommand = handler.SubCommand{
 				Required:    true,
 			},
 		},
-		Run: func(context *handler.Context) error {
+		Run: func(context *commander.Context) error {
 			context.RespondText("template")
 
 			return nil

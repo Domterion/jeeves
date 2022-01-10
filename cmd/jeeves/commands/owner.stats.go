@@ -2,11 +2,11 @@ package commands
 
 import (
 	"github.com/bwmarrin/discordgo"
-	"github.com/domterion/jeeves/handler"
+	"github.com/domterion/jeeves/commander"
 )
 
-var OwnerStatsCommand handler.SubCommand = handler.SubCommand{
-	BaseCommand: handler.BaseCommand{
+var OwnerStatsCommand commander.SubCommand = commander.SubCommand{
+	BaseCommand: commander.BaseCommand{
 		Name:        "stats",
 		Description: "Get bot stats... or something",
 		Type:        discordgo.ChatApplicationCommand,
@@ -24,7 +24,7 @@ var OwnerStatsCommand handler.SubCommand = handler.SubCommand{
 				Required:    false,
 			},
 		},
-		Run: func(context *handler.Context) error {
+		Run: func(context *commander.Context) error {
 			context.RespondText("yes")
 
 			return nil

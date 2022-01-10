@@ -2,11 +2,11 @@ package commands
 
 import (
 	"github.com/bwmarrin/discordgo"
-	"github.com/domterion/jeeves/handler"
+	"github.com/domterion/jeeves/commander"
 )
 
-var OwnerTestCommand handler.SubCommandGroup = handler.SubCommandGroup{
-	BaseCommand: handler.BaseCommand{
+var OwnerTestCommand commander.SubCommandGroup = commander.SubCommandGroup{
+	BaseCommand: commander.BaseCommand{
 		Name:        "test",
 		Description: ".",
 		Type:        discordgo.ChatApplicationCommand,
@@ -15,5 +15,5 @@ var OwnerTestCommand handler.SubCommandGroup = handler.SubCommandGroup{
 		Run: nil,
 	},
 
-	SubCommands: []*handler.SubCommand{&OwnerTestIclesCommand, &OwnerSayCommand},
+	SubCommands: []*commander.SubCommand{&OwnerTestIclesCommand, &OwnerSayCommand},
 }

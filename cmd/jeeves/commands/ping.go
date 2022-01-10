@@ -2,21 +2,21 @@ package commands
 
 import (
 	"github.com/bwmarrin/discordgo"
-	"github.com/domterion/jeeves/handler"
+	"github.com/domterion/jeeves/commander"
 )
 
-var PingCommand handler.Command = handler.Command{
-	BaseCommand: handler.BaseCommand{
+var PingCommand commander.Command = commander.Command{
+	BaseCommand: commander.BaseCommand{
 		Name:        "ping",
 		Description: "pong",
 		Type:        discordgo.ChatApplicationCommand,
 		Options: []*discordgo.ApplicationCommandOption{},
-		Run: func(context *handler.Context) error {
+		Run: func(context *commander.Context) error {
 			context.RespondText("pong!")
 
 			return nil
 		},
 	},
-	SubCommands:      []*handler.SubCommand{},
-	SubCommandGroups: []*handler.SubCommandGroup{},
+	SubCommands:      []*commander.SubCommand{},
+	SubCommandGroups: []*commander.SubCommandGroup{},
 }

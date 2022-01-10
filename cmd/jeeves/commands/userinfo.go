@@ -2,15 +2,15 @@ package commands
 
 import (
 	"github.com/bwmarrin/discordgo"
-	"github.com/domterion/jeeves/handler"
+	"github.com/domterion/jeeves/commander"
 )
 
-var UserInfoCommand handler.Command = handler.Command{
-	BaseCommand: handler.BaseCommand{
+var UserInfoCommand commander.Command = commander.Command{
+	BaseCommand: commander.BaseCommand{
 		Name:    "userinfo",
 		Type:    discordgo.UserApplicationCommand,
 		Options: []*discordgo.ApplicationCommandOption{},
-		Run: func(context *handler.Context) error {
+		Run: func(context *commander.Context) error {
 			context.Respond(&discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseChannelMessageWithSource,
 				Data: &discordgo.InteractionResponseData{
@@ -22,6 +22,6 @@ var UserInfoCommand handler.Command = handler.Command{
 			return nil
 		},
 	},
-	SubCommands:      []*handler.SubCommand{},
-	SubCommandGroups: []*handler.SubCommandGroup{},
+	SubCommands:      []*commander.SubCommand{},
+	SubCommandGroups: []*commander.SubCommandGroup{},
 }
