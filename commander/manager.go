@@ -18,7 +18,8 @@ type Manager struct {
 
 // The options, or configuration, for the manager
 type Options struct {
-	TestGuild string // The ID of a guild to register commands to or empty for global
+	TestGuild      string                            // The ID of a guild to register commands to or empty for global
+	OnCommandError func(err error, context *Context) // The function that is fired when there is an error returned from a command run
 }
 
 // Construct a new command manager
@@ -30,11 +31,18 @@ func New(session *discordgo.Session, options ...Options) (*Manager, error) {
 
 	manager.options = &Options{
 		TestGuild: "",
+		OnCommandError: func(err error, context *Context) {
+			log.Printf("%v command error: %v", context.CommandName, err)
+		},
 	}
 
 	if len(options) > 0 {
 		if options[0].TestGuild != "" {
 			manager.options.TestGuild = options[0].TestGuild
+		}
+
+		if options[0].OnCommandError != nil {
+			manager.options.OnCommandError = options[0].OnCommandError
 		}
 	}
 
@@ -121,6 +129,7 @@ func (m *Manager) handleApplicationCommand(s *discordgo.Session, e *discordgo.In
 		Session:         m.Session,
 		Event:           e,
 		Options:         e.ApplicationCommandData().Options,
+		CommandName:     name,
 		ResolvedOptions: e.ApplicationCommandData().Resolved,
 		Member:          e.Member,
 		User:            e.User,
@@ -129,7 +138,8 @@ func (m *Manager) handleApplicationCommand(s *discordgo.Session, e *discordgo.In
 	err := commandObject.Run(&context)
 
 	if err != nil {
-		// TODO: Error handling should be informative and customizable
+		m.options.OnCommandError(err, &context)
+
 		return
 	}
 }

@@ -25,7 +25,7 @@ var OwnerStatsCommand commander.SubCommand = commander.SubCommand{
 			},
 		},
 		Run: func(context *commander.Context) error {
-			context.Respond(&discordgo.InteractionResponse{
+			return context.Respond(&discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseChannelMessageWithSource,
 				Data: &discordgo.InteractionResponseData{
 					Flags:   1 << 6,
@@ -46,8 +46,6 @@ var OwnerStatsCommand commander.SubCommand = commander.SubCommand{
 					},
 				},
 			})
-
-			return nil
 		},
 	},
 }

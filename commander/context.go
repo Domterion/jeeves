@@ -8,6 +8,7 @@ import (
 type Context struct {
 	Session         *discordgo.Session                                   // A pointer to the discordgo session
 	Event           *discordgo.InteractionCreate                         // A pointer to the event that triggered the command
+	CommandName     string                                               // The command name used to invoke the command
 	Options         []*discordgo.ApplicationCommandInteractionDataOption // The options the user passed
 	ResolvedOptions *discordgo.ApplicationCommandInteractionDataResolved // Resolved options from Discord such as user and channel options
 	Member          *discordgo.Member                                    // The member object for the command caller
@@ -15,12 +16,12 @@ type Context struct {
 }
 
 // Respond to an interaction
-func (c *Context) Respond(response *discordgo.InteractionResponse) (error) {
+func (c *Context) Respond(response *discordgo.InteractionResponse) error {
 	return c.Session.InteractionRespond(c.Event.Interaction, response)
 }
 
 // Respond to an interaction with plain text
-func (c *Context) RespondText(text string) (error) {
+func (c *Context) RespondText(text string) error {
 	return c.Respond(&discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{

@@ -6,15 +6,13 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-type Runnable func(context *Context) error
-
 // A base command that all commands must implement
 type BaseCommand struct {
 	Name        string                                // The name of the command to register with Discord
 	Description string                                // The description for the command
 	Type        discordgo.ApplicationCommandType      // The type of the command, User, Message or Chat
 	Options     []*discordgo.ApplicationCommandOption // Options for the command
-	Run         Runnable                              // The handler function for the command
+	Run         func(context *Context) error                              // The handler function for the command
 }
 
 // A root command
