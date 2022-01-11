@@ -12,7 +12,6 @@ type Context struct {
 	Options         []*discordgo.ApplicationCommandInteractionDataOption // The options the user passed
 	ResolvedOptions *discordgo.ApplicationCommandInteractionDataResolved // Resolved options from Discord such as user and channel options
 	Member          *discordgo.Member                                    // The member object for the command caller
-	User            *discordgo.User                                      // The user object for the command caller
 }
 
 // Respond to an interaction

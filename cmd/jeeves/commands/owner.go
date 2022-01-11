@@ -14,6 +14,6 @@ var OwnerCommand commander.Command = commander.Command{
 		// This command cant be called since it has subcommands
 		Run: nil,
 	},
-	SubCommands:      []*commander.SubCommand{&OwnerSayCommand, &OwnerStatsCommand},
+	SubCommands:      []*commander.SubCommand{&OwnerStatsCommand},
 	SubCommandGroups: []*commander.SubCommandGroup{&OwnerTestCommand},
 }

@@ -1,11 +1,13 @@
 package commands
 
 import (
+	"fmt"
+
 	"github.com/bwmarrin/discordgo"
 	"github.com/domterion/jeeves/commander"
 )
 
-var OwnerSayCommand commander.SubCommand = commander.SubCommand{
+var SayCommand commander.Command = commander.Command{
 	BaseCommand: commander.BaseCommand{
 		Name:        "say",
 		Description: "Make me repeat a phrase",
@@ -19,7 +21,8 @@ var OwnerSayCommand commander.SubCommand = commander.SubCommand{
 			},
 		},
 		Run: func(context *commander.Context) error {
-			context.RespondText("template")
+			message := fmt.Sprintf("%s says: %s", context.Member.User.Mention(), context.Options[0].Value)
+			context.RespondText(message)
 
 			return nil
 		},

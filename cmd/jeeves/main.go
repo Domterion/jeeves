@@ -35,6 +35,7 @@ func main() {
 
 	commandManager.AddCommand(commands.OwnerCommand)
 	commandManager.AddCommand(commands.PingCommand)
+	commandManager.AddCommand(commands.SayCommand)
 	commandManager.AddCommand(commands.UserInfoCommand)
 
 	err = discord.Open()

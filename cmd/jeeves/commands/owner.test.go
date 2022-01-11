@@ -15,5 +15,5 @@ var OwnerTestCommand commander.SubCommandGroup = commander.SubCommandGroup{
 		Run: nil,
 	},
 
-	SubCommands: []*commander.SubCommand{&OwnerTestIclesCommand, &OwnerSayCommand},
+	SubCommands: []*commander.SubCommand{&OwnerTestIclesCommand},
 }

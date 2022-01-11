@@ -132,7 +132,6 @@ func (m *Manager) handleApplicationCommand(s *discordgo.Session, e *discordgo.In
 		CommandName:     name,
 		ResolvedOptions: e.ApplicationCommandData().Resolved,
 		Member:          e.Member,
-		User:            e.User,
 	}
 
 	err := commandObject.Run(&context)
