@@ -25,7 +25,27 @@ var OwnerStatsCommand commander.SubCommand = commander.SubCommand{
 			},
 		},
 		Run: func(context *commander.Context) error {
-			context.RespondText("yes")
+			context.Respond(&discordgo.InteractionResponse{
+				Type: discordgo.InteractionResponseChannelMessageWithSource,
+				Data: &discordgo.InteractionResponseData{
+					Flags:   1 << 6,
+					Content: "You just got stinkbugged!",
+					Components: []discordgo.MessageComponent{
+						discordgo.ActionsRow{
+							Components: []discordgo.MessageComponent{
+								discordgo.Button{
+									Emoji: discordgo.ComponentEmoji{
+										Name: "🔨",
+									},
+									Label: "ponk",
+									CustomID: context.Member.User.ID + ":" + "ponk",
+									Style: discordgo.PrimaryButton,
+								},
+							},
+						},
+					},
+				},
+			})
 
 			return nil
 		},

@@ -63,3 +63,4 @@ Next we are on to storage of commands which should be simple enough...
 
 the manager now binds to `onReady()` and automatically registers commands on ready!
 
+now the command handler has a name, Commander! slash command support is almost done and soon to handling interactions now the command handler has a name, Commander! slash command support is almost done and soon to handling message components 😋

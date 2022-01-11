@@ -16,6 +16,19 @@ var UserInfoCommand commander.Command = commander.Command{
 				Data: &discordgo.InteractionResponseData{
 					Flags:   1 << 6,
 					Content: "You just got stinkbugged!",
+					Components: []discordgo.MessageComponent{
+						discordgo.ActionsRow{
+							Components: []discordgo.MessageComponent{
+								discordgo.Button{
+									Emoji: discordgo.ComponentEmoji{
+										Name: "🔨",
+									},
+									Label: "ponk",
+									Style: discordgo.PrimaryButton,
+								},
+							},
+						},
+					},
 				},
 			})
 

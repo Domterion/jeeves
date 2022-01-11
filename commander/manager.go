@@ -9,17 +9,19 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+// A struct to hold all data for the manager
 type Manager struct {
-	Session *discordgo.Session
-	// This has to be an interface{} because we have multiple command types ie Command, *SubCommandGroup and *SubCommand
-	commands map[string]interface{}
-	options  *Options
+	Session  *discordgo.Session     // The discordgo session to use with registering commands and handling  events
+	commands map[string]interface{} // All commands registered to the manager, it can be a Command or SubCommand
+	options  *Options               // Registered option to act as a configuration
 }
 
+// The options, or configuration, for the manager
 type Options struct {
 	TestGuild string // The ID of a guild to register commands to or empty for global
 }
 
+// Construct a new command manager
 func New(session *discordgo.Session, options ...Options) (*Manager, error) {
 	manager := &Manager{
 		Session:  session,
@@ -42,29 +44,30 @@ func New(session *discordgo.Session, options ...Options) (*Manager, error) {
 	return manager, nil
 }
 
+// Adds a command to the manager and registers all subcommands
 func (m *Manager) AddCommand(command Command) {
 	baseCommandName := command.Name
 
 	m.commands[baseCommandName] = command
-	//log.Printf("command %s added \n", baseCommandName)
+	// log.Printf("command %s added", baseCommandName)
 
 	for _, subcommand := range command.SubCommands {
 		subCommandName := fmt.Sprintf("%s %s", baseCommandName, subcommand.Name)
 		m.commands[subCommandName] = subcommand
-		//log.Printf("subcommand %s added \n", subCommandName)
+		// log.Printf("subcommand %s added", subCommandName)
 	}
 
 	for _, subcommandgroup := range command.SubCommandGroups {
 		subCommandGroupName := fmt.Sprintf("%s %s", baseCommandName, subcommandgroup.Name)
-		//log.Printf("on subcommandGroup %s \n", subCommandGroupName)
+		// log.Printf("on subcommandGroup %s", subCommandGroupName)
 
 		for _, subcommand := range subcommandgroup.SubCommands {
 			subCommandName := fmt.Sprintf("%s %s", subCommandGroupName, subcommand.Name)
 			m.commands[subCommandName] = subcommand
-			//log.Printf("subcommand %s added in group\n", subCommandName)
+			// log.Printf("subcommand %s added in group", subCommandName)
 		}
 
-		//log.Println("end group")
+		// log.Println("end group")
 	}
 }
 

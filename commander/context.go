@@ -1,6 +1,8 @@
 package commander
 
-import "github.com/bwmarrin/discordgo"
+import (
+	"github.com/bwmarrin/discordgo"
+)
 
 // A struct to provide useful information to command run functions
 type Context struct {
@@ -12,12 +14,14 @@ type Context struct {
 	User            *discordgo.User                                      // The user object for the command caller
 }
 
-func (c *Context) Respond(response *discordgo.InteractionResponse) {
-	c.Session.InteractionRespond(c.Event.Interaction, response)
+// Respond to an interaction
+func (c *Context) Respond(response *discordgo.InteractionResponse) (error) {
+	return c.Session.InteractionRespond(c.Event.Interaction, response)
 }
 
-func (c *Context) RespondText(text string) {
-	c.Respond(&discordgo.InteractionResponse{
+// Respond to an interaction with plain text
+func (c *Context) RespondText(text string) (error) {
+	return c.Respond(&discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: text,

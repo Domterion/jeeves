@@ -8,6 +8,7 @@ import (
 
 type Runnable func(context *Context) error
 
+// A base command that all commands must implement
 type BaseCommand struct {
 	Name        string                                // The name of the command to register with Discord
 	Description string                                // The description for the command
@@ -16,22 +17,26 @@ type BaseCommand struct {
 	Run         Runnable                              // The handler function for the command
 }
 
+// A root command
 type Command struct {
 	BaseCommand
 
-	SubCommands      []*SubCommand
-	SubCommandGroups []*SubCommandGroup
+	SubCommands      []*SubCommand      // A slice of subcommands for this root command
+	SubCommandGroups []*SubCommandGroup // A slice of subcommand groups for this command
 }
 
+// A subcommand
 type SubCommand struct {
 	BaseCommand
 }
 
+// A subcommand group
 type SubCommandGroup struct {
 	BaseCommand
-	SubCommands []*SubCommand
+	SubCommands []*SubCommand // A slice of subcommands for this subcommand group
 }
 
+// Converts a commander command object to a discordgo application command
 func (c Command) ToApplicationCommand() *discordgo.ApplicationCommand {
 	switch c.Type {
 	case discordgo.ChatApplicationCommand:
@@ -70,6 +75,7 @@ func (c Command) ToApplicationCommand() *discordgo.ApplicationCommand {
 	}
 }
 
+// Converts a subcommand group and its subcommands to one discordgo option type
 func (c SubCommandGroup) ToOption() *discordgo.ApplicationCommandOption {
 	var subcommands []*discordgo.ApplicationCommandOption
 
@@ -85,6 +91,7 @@ func (c SubCommandGroup) ToOption() *discordgo.ApplicationCommandOption {
 	}
 }
 
+// Converts a subcommand to a discordgo option
 func (c SubCommand) ToOption() *discordgo.ApplicationCommandOption {
 	return &discordgo.ApplicationCommandOption{
 		Name:        c.Name,
