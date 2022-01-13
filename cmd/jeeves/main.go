@@ -33,9 +33,9 @@ func main() {
 		log.Fatalf("Failed to create command manager: %v", err)
 	}
 
-	commandManager.AddCommand(commands.OwnerCommand)
 	commandManager.AddCommand(commands.PingCommand)
 	commandManager.AddCommand(commands.SayCommand)
+	commandManager.AddCommand(commands.UserCommand)
 	commandManager.AddCommand(commands.UserInfoCommand)
 
 	err = discord.Open()

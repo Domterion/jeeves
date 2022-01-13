@@ -5,15 +5,15 @@ import (
 	"github.com/domterion/jeeves/commander"
 )
 
-var OwnerCommand commander.Command = commander.Command{
+var UserCommand commander.Command = commander.Command{
 	BaseCommand: commander.BaseCommand{
-		Name:        "owner",
+		Name:        "user",
 		Description: ".",
 		Type:        discordgo.ChatApplicationCommand,
 		Options:     []*discordgo.ApplicationCommandOption{},
 		// This command cant be called since it has subcommands
 		Run: nil,
 	},
-	SubCommands:      []*commander.SubCommand{&OwnerStatsCommand},
-	SubCommandGroups: []*commander.SubCommandGroup{&OwnerTestCommand},
+	SubCommands:      []*commander.SubCommand{&UserAvatarCommand},
+	SubCommandGroups: []*commander.SubCommandGroup{},
 }
