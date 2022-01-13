@@ -1,6 +1,6 @@
 <div align="center">
     <h1>💻 Commander</h1>
-    Commander is an interaction and command framework for <a href="https://github.com/bwmarrin/discordgo">Discordgo</a>
+    Commander is an interaction and command framework for <a href="https://github.com/bwmarrin/discordgo">Discordgo</a>.
     <br>
     <br>
 </div>
@@ -32,6 +32,12 @@ var PingCommand commander.Command = commander.Command{
 ```
 
 more examples can be found in `examples/`
+
+# TODO
+
+- [ ] Interaction handling such as buttons, currently only slash commands are supported and handled.
+- [ ] More concise error handling and reporting
+- [ ] Move commander to a separate repository and make it a proper package
 
 # License
 MIT

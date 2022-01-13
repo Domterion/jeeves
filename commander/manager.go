@@ -154,8 +154,6 @@ func (m *Manager) handleApplicationCommand(s *discordgo.Session, e *discordgo.In
 	if commandObject.BeforeRun != nil {
 		before := commandObject.BeforeRun(&context)
 
-		fmt.Printf("before: %v\n", before)
-
 		if !before {
 			return
 		}
