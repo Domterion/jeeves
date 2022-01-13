@@ -20,6 +20,9 @@ var SayCommand commander.Command = commander.Command{
 				Required:    true,
 			},
 		},
+		BeforeRun: func(context *commander.Context) bool {
+			return context.Member.User.ID == "300088143422685185"
+		},
 		Run: func(context *commander.Context) error {
 			message := fmt.Sprintf("%s says: %s", context.Member.User.Mention(), context.Options[0].Value)
 			context.RespondText(message)

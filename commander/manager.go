@@ -61,6 +61,12 @@ func (m *Manager) AddCommand(command Command) {
 
 	for _, subcommand := range command.SubCommands {
 		subCommandName := fmt.Sprintf("%s %s", baseCommandName, subcommand.Name)
+
+		// If the base command has a BeforeRun defined and subcommand doesnt then it will use the base commands BefordRun
+		if command.BeforeRun != nil && subcommand.BeforeRun == nil {
+			subcommand.BeforeRun = command.BeforeRun
+		}
+
 		m.commands[subCommandName] = subcommand
 		// log.Printf("subcommand %s added", subCommandName)
 	}
@@ -69,7 +75,18 @@ func (m *Manager) AddCommand(command Command) {
 		subCommandGroupName := fmt.Sprintf("%s %s", baseCommandName, subcommandgroup.Name)
 		// log.Printf("on subcommandGroup %s", subCommandGroupName)
 
+		// If the base command has a BeforeRun defined but the group doesnt then it will use the base commmands
+		if command.BeforeRun != nil && subcommandgroup.BeforeRun == nil {
+			subcommandgroup.BeforeRun = command.BeforeRun
+		}
+
 		for _, subcommand := range subcommandgroup.SubCommands {
+
+			// If the subcommandgroup has a BeforeRun defined but the subcommand doesnt then it will use the groups
+			if subcommandgroup.BeforeRun != nil && subcommand.BeforeRun == nil {
+				subcommand.BeforeRun = subcommandgroup.BeforeRun
+			}
+
 			subCommandName := fmt.Sprintf("%s %s", subCommandGroupName, subcommand.Name)
 			m.commands[subCommandName] = subcommand
 			// log.Printf("subcommand %s added in group", subCommandName)
@@ -132,6 +149,16 @@ func (m *Manager) handleApplicationCommand(s *discordgo.Session, e *discordgo.In
 		CommandName:     name,
 		ResolvedOptions: e.ApplicationCommandData().Resolved,
 		Member:          e.Member,
+	}
+
+	if commandObject.BeforeRun != nil {
+		before := commandObject.BeforeRun(&context)
+
+		fmt.Printf("before: %v\n", before)
+
+		if !before {
+			return
+		}
 	}
 
 	err := commandObject.Run(&context)

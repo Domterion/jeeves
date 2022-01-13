@@ -12,7 +12,8 @@ type BaseCommand struct {
 	Description string                                // The description for the command
 	Type        discordgo.ApplicationCommandType      // The type of the command, User, Message or Chat
 	Options     []*discordgo.ApplicationCommandOption // Options for the command
-	Run         func(context *Context) error                              // The handler function for the command
+	BeforeRun    func(context *Context) bool          // The function called before Run, typically used for checks
+	Run         func(context *Context) error          // The handler function for the command
 }
 
 // A root command

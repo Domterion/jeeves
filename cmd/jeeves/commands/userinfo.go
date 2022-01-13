@@ -12,6 +12,7 @@ var UserInfoCommand commander.Command = commander.Command{
 		Name:    "userinfo",
 		Type:    discordgo.UserApplicationCommand,
 		Options: []*discordgo.ApplicationCommandOption{},
+		BeforeRun: nil,
 		Run: func(context *commander.Context) error {
 			context.Respond(&discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseChannelMessageWithSource,

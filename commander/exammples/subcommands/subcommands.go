@@ -1,4 +1,4 @@
-package commands
+package subcommands
 
 import (
 	"fmt"
@@ -6,6 +6,20 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/domterion/jeeves/commander"
 )
+
+var UserCommand commander.Command = commander.Command{
+	BaseCommand: commander.BaseCommand{
+		Name:        "user",
+		Description: ".",
+		Type:        discordgo.ChatApplicationCommand,
+		Options:     []*discordgo.ApplicationCommandOption{},
+		BeforeRun:   nil,
+		// This command cant be called since it has subcommands
+		Run: nil,
+	},
+	SubCommands:      []*commander.SubCommand{&UserAvatarCommand},
+	SubCommandGroups: []*commander.SubCommandGroup{},
+}
 
 var UserAvatarCommand commander.SubCommand = commander.SubCommand{
 	BaseCommand: commander.BaseCommand{
@@ -22,10 +36,6 @@ var UserAvatarCommand commander.SubCommand = commander.SubCommand{
 		},
 		BeforeRun: nil,
 		Run: func(context *commander.Context) error {
-			// userId := context.Options[0].Value
-			// log.Println(userId)
-			// log.Println(context.Event.ApplicationCommandData().Options[0].Options[0].UserValue(nil).AvatarURL(""))
-
 			for _, user := range context.ResolvedOptions.Users {
 				message := fmt.Sprintf("%s's avatar:\n\n%s", user.Mention(), user.AvatarURL(""))
 				context.RespondText(message)
