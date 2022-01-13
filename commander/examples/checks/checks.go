@@ -35,7 +35,7 @@ var OwnerCoolCommand commander.SubCommand = commander.SubCommand{
 		Options:     []*discordgo.ApplicationCommandOption{},
 		BeforeRun:   nil,
 		Run: func(context *commander.Context) error {
-			context.RespondText("youre so cool!")
+			context.RespondText("Youre so cool!")
 
 			return nil
 		},
