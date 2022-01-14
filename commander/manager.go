@@ -133,13 +133,15 @@ func (m *Manager) handleApplicationCommand(s *discordgo.Session, e *discordgo.In
 
 	var commandObject BaseCommand
 
+	// The only commands that can be ran are commands and subcommands so anything else shouldnt pass this
 	switch c := command.(type) {
 	case Command:
 		commandObject = c.BaseCommand
-	case *SubCommandGroup:
-		commandObject = c.BaseCommand
 	case *SubCommand:
 		commandObject = c.BaseCommand
+	default:
+		// This should never be a problem but better safe than sorry
+		log.Fatalf("unsupported command type called..?")
 	}
 
 	context := Context{
@@ -150,7 +152,7 @@ func (m *Manager) handleApplicationCommand(s *discordgo.Session, e *discordgo.In
 		ResolvedOptions: e.ApplicationCommandData().Resolved,
 		Member:          e.Member,
 	}
-	
+
 	if commandObject.BeforeRun != nil {
 		before := commandObject.BeforeRun(&context)
 

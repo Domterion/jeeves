@@ -19,9 +19,7 @@ var PingCommand commander.Command = commander.Command{
 		Description: "pong",
 		Type:        discordgo.ChatApplicationCommand,
 		Run: func(context *commander.Context) error {
-			context.RespondText("pong!")
-
-			return nil
+			return context.RespondText("pong!")
 		},
 	},
 }
