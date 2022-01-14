@@ -7,8 +7,8 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/domterion/jeeves/cmd/jeeves/commands"
-	"github.com/domterion/jeeves/common/config"
 	"github.com/domterion/jeeves/commander"
+	"github.com/domterion/jeeves/common/config"
 )
 
 func main() {
@@ -37,6 +37,7 @@ func main() {
 	commandManager.AddCommand(commands.SayCommand)
 	commandManager.AddCommand(commands.UserCommand)
 	commandManager.AddCommand(commands.UserInfoCommand)
+	commandManager.AddCommand(commands.TestCommand)
 
 	err = discord.Open()
 	if err != nil {

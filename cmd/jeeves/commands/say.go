@@ -25,9 +25,7 @@ var SayCommand commander.Command = commander.Command{
 		},
 		Run: func(context *commander.Context) error {
 			message := fmt.Sprintf("%s says: %s", context.Member.User.Mention(), context.Options[0].Value)
-			context.RespondText(message)
-
-			return nil
+			return context.RespondText(message)
 		},
 	},
 }
