@@ -14,16 +14,12 @@ var OwnerCommand commander.Command = commander.Command{
 		Name:        "owner",
 		Description: ".",
 		Type:        discordgo.ChatApplicationCommand,
-		Options:     []*discordgo.ApplicationCommandOption{},
 		BeforeRun: func(context *commander.Context) bool {
 			// Check if the command caller ID matches
 			return context.Member.User.ID == "300088143422685185"
 		},
-		// This command cant be called since it has subcommands
-		Run: nil,
 	},
 	SubCommands:      []*commander.SubCommand{&OwnerCoolCommand},
-	SubCommandGroups: []*commander.SubCommandGroup{},
 }
 
 // The owner cool command will inherit the check from its base command so we dont need to redefine it
@@ -32,12 +28,8 @@ var OwnerCoolCommand commander.SubCommand = commander.SubCommand{
 		Name:        "cool",
 		Description: "Are you cool?",
 		Type:        discordgo.ChatApplicationCommand,
-		Options:     []*discordgo.ApplicationCommandOption{},
-		BeforeRun:   nil,
 		Run: func(context *commander.Context) error {
-			context.RespondText("Youre so cool!")
-
-			return nil
+			return context.RespondText("Youre so cool!")
 		},
 	},
 }

@@ -10,12 +10,6 @@ var UserCommand commander.Command = commander.Command{
 		Name:        "user",
 		Description: ".",
 		Type:        discordgo.ChatApplicationCommand,
-		Options:     []*discordgo.ApplicationCommandOption{},
-		// BeforeRun if set here will set for all child command
-		BeforeRun: nil,
-		// This command cant be called since it has subcommands
-		Run: nil,
 	},
-	SubCommands:      []*commander.SubCommand{&UserAvatarCommand},
-	SubCommandGroups: []*commander.SubCommandGroup{},
+	SubCommands: []*commander.SubCommand{&UserAvatarCommand},
 }

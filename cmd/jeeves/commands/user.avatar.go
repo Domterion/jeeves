@@ -30,7 +30,7 @@ var UserAvatarCommand commander.SubCommand = commander.SubCommand{
 				message := fmt.Sprintf("%s's avatar:\n\n%s", user.Mention(), user.AvatarURL(""))
 				context.RespondText(message)
 			}
-
+			SHEnTiveriSERmONsfIatEPicIa
 			return nil
 		},
 	},

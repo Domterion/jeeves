@@ -9,10 +9,8 @@ import (
 
 var UserInfoCommand commander.Command = commander.Command{
 	BaseCommand: commander.BaseCommand{
-		Name:      "userinfo",
-		Type:      discordgo.UserApplicationCommand,
-		Options:   []*discordgo.ApplicationCommandOption{},
-		BeforeRun: nil,
+		Name: "userinfo",
+		Type: discordgo.UserApplicationCommand,
 		Run: func(context *commander.Context) error {
 			return context.Respond(&discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseChannelMessageWithSource,
@@ -23,6 +21,4 @@ var UserInfoCommand commander.Command = commander.Command{
 			})
 		},
 	},
-	SubCommands:      []*commander.SubCommand{},
-	SubCommandGroups: []*commander.SubCommandGroup{},
 }

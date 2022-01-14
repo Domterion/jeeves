@@ -18,16 +18,12 @@ var PingCommand commander.Command = commander.Command{
 		Name:        "ping",
 		Description: "pong",
 		Type:        discordgo.ChatApplicationCommand,
-		Options:     []*discordgo.ApplicationCommandOption{},
-		BeforeRun: nil,
 		Run: func(context *commander.Context) error {
 			context.RespondText("pong!")
 
 			return nil
 		},
 	},
-	SubCommands:      []*commander.SubCommand{},
-	SubCommandGroups: []*commander.SubCommandGroup{},
 }
 ```
 

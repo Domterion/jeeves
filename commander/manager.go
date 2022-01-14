@@ -150,7 +150,7 @@ func (m *Manager) handleApplicationCommand(s *discordgo.Session, e *discordgo.In
 		ResolvedOptions: e.ApplicationCommandData().Resolved,
 		Member:          e.Member,
 	}
-
+	
 	if commandObject.BeforeRun != nil {
 		before := commandObject.BeforeRun(&context)
 

@@ -10,8 +10,6 @@ var TestCommand commander.Command = commander.Command{
 		Name:        "test",
 		Description: "command for... testing",
 		Type:        discordgo.ChatApplicationCommand,
-		Options:     []*discordgo.ApplicationCommandOption{},
-		BeforeRun:   nil,
 		Run: func(context *commander.Context) error {
 			return context.Respond(&discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseChannelMessageWithSource,
@@ -36,6 +34,4 @@ var TestCommand commander.Command = commander.Command{
 			})
 		},
 	},
-	SubCommands:      []*commander.SubCommand{},
-	SubCommandGroups: []*commander.SubCommandGroup{},
 }

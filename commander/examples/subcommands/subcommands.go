@@ -12,13 +12,8 @@ var UserCommand commander.Command = commander.Command{
 		Name:        "user",
 		Description: ".",
 		Type:        discordgo.ChatApplicationCommand,
-		Options:     []*discordgo.ApplicationCommandOption{},
-		BeforeRun:   nil,
-		// This command cant be called since it has subcommands
-		Run: nil,
 	},
 	SubCommands:      []*commander.SubCommand{&UserAvatarCommand},
-	SubCommandGroups: []*commander.SubCommandGroup{},
 }
 
 var UserAvatarCommand commander.SubCommand = commander.SubCommand{
@@ -34,7 +29,6 @@ var UserAvatarCommand commander.SubCommand = commander.SubCommand{
 				Required:    true,
 			},
 		},
-		BeforeRun: nil,
 		Run: func(context *commander.Context) error {
 			for _, user := range context.ResolvedOptions.Users {
 				message := fmt.Sprintf("%s's avatar:\n\n%s", user.Mention(), user.AvatarURL(""))
