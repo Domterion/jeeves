@@ -172,6 +172,7 @@ func (m *Manager) handleApplicationCommand(s *discordgo.Session, e *discordgo.In
 
 func (m *Manager) handleMessageComponent(s *discordgo.Session, e *discordgo.InteractionCreate) {
 	log.Println("message component")
+	log.Println(e.MessageComponentData().CustomID)
 }
 
 func recurseCommandOptions(options []*discordgo.ApplicationCommandInteractionDataOption, name string) string {

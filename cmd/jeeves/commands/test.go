@@ -24,7 +24,7 @@ var TestCommand commander.Command = commander.Command{
 										Name: "🚀",
 									},
 									Label:    "wocket",
-									CustomID: context.Member.User.ID + ":" + "test",
+									CustomID: context.Event.GuildID + ":" + context.Member.User.ID + ":" + "test",
 									Style:    discordgo.PrimaryButton,
 								},
 							},
