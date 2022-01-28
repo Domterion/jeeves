@@ -11,9 +11,10 @@ import (
 
 // A struct to hold all data for the manager
 type Manager struct {
-	Session  *discordgo.Session     // The discordgo session to use with registering commands and handling  events
-	commands map[string]interface{} // All commands registered to the manager, it can be a Command or SubCommand
-	options  *Options               // Registered option to act as a configuration
+	Session    *discordgo.Session     // The discordgo session to use with registering commands and handling  events
+	commands   map[string]interface{} // All commands registered to the manager, it can be a Command or SubCommand
+	components map[string]interface{} // Component listeners, can be any of Button and SelectMenu
+	options    *Options               // Registered option to act as a configuration
 }
 
 // The options, or configuration, for the manager
@@ -25,14 +26,15 @@ type Options struct {
 // Construct a new command manager
 func New(session *discordgo.Session, options ...Options) (*Manager, error) {
 	manager := &Manager{
-		Session:  session,
-		commands: make(map[string]interface{}),
+		Session:    session,
+		commands:   make(map[string]interface{}),
+		components: make(map[string]interface{}),
 	}
 
 	manager.options = &Options{
 		TestGuild: "",
 		OnCommandError: func(err error, context *Context) {
-			log.Printf("%v command error: %v", context.CommandName, err)
+			log.Printf("%v command error: %v", context.Name, err)
 		},
 	}
 
@@ -96,6 +98,32 @@ func (m *Manager) AddCommand(command Command) {
 	}
 }
 
+func (m *Manager) addComponent(component interface{}) {
+	switch c := component.(type) {
+	case Button:
+		m.components[c.CustomID] = c
+	case SelectMenu:
+		m.components[c.CustomID] = c
+	case ActionRow:
+		for _, comp := range c.components {
+			switch c_ := comp.(type) {
+			case Button:
+				m.components[c_.CustomID] = c_
+			case SelectMenu:
+				m.components[c_.CustomID] = c_
+			}
+		}
+	default:
+		log.Printf("unsupported component type")
+	}
+}
+
+func (m *Manager) AddComponents(components Components) {
+	for _, c := range components.components {
+		m.addComponent(c)
+	}
+}
+
 func (m *Manager) onReady(s *discordgo.Session, e *discordgo.Ready) {
 	for _, command := range m.commands {
 		switch c := command.(type) {
@@ -147,8 +175,9 @@ func (m *Manager) handleApplicationCommand(s *discordgo.Session, e *discordgo.In
 	context := Context{
 		Session:         m.Session,
 		Event:           e,
+		Manager:         m,
 		Options:         e.ApplicationCommandData().Options,
-		CommandName:     name,
+		Name:     name,
 		ResolvedOptions: e.ApplicationCommandData().Resolved,
 		Member:          e.Member,
 	}
@@ -171,8 +200,33 @@ func (m *Manager) handleApplicationCommand(s *discordgo.Session, e *discordgo.In
 }
 
 func (m *Manager) handleMessageComponent(s *discordgo.Session, e *discordgo.InteractionCreate) {
-	log.Println("message component")
-	log.Println(e.MessageComponentData().CustomID)
+	component, exists := m.components[e.MessageComponentData().CustomID]
+
+	if !exists {
+		return
+	}
+
+	var componentObject BaseComponent
+
+	switch c := component.(type) {
+	case Button:
+		componentObject = c.BaseComponent
+	case SelectMenu:
+		componentObject = c.BaseComponent
+	default:
+		// This should never be a problem but better safe than sorry
+		log.Fatalf("unsupported component type called..?")
+	}
+
+	context := ComponentContext{
+		Session:         m.Session,
+		Event:           e,
+		Manager:         m,
+		Name:            e.MessageComponentData().CustomID,
+		Member:          e.Member,
+	}
+
+	componentObject.Run(&context)
 }
 
 func recurseCommandOptions(options []*discordgo.ApplicationCommandInteractionDataOption, name string) string {
