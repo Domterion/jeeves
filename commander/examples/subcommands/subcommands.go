@@ -29,7 +29,7 @@ var UserAvatarCommand commander.SubCommand = commander.SubCommand{
 				Required:    true,
 			},
 		},
-		Run: func(context *commander.Context) error {
+		Run: func(context *commander.CommandContext) error {
 			for _, user := range context.ResolvedOptions.Users {
 				message := fmt.Sprintf("%s's avatar:\n\n%s", user.Mention(), user.AvatarURL(""))
 				context.RespondText(message)

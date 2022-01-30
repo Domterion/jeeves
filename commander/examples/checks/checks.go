@@ -14,7 +14,7 @@ var OwnerCommand commander.Command = commander.Command{
 		Name:        "owner",
 		Description: ".",
 		Type:        discordgo.ChatApplicationCommand,
-		BeforeRun: func(context *commander.Context) bool {
+		BeforeRun: func(context *commander.CommandContext) bool {
 			// Check if the command caller ID matches
 			return context.Member.User.ID == "300088143422685185"
 		},
@@ -28,7 +28,7 @@ var OwnerCoolCommand commander.SubCommand = commander.SubCommand{
 		Name:        "cool",
 		Description: "Are you cool?",
 		Type:        discordgo.ChatApplicationCommand,
-		Run: func(context *commander.Context) error {
+		Run: func(context *commander.CommandContext) error {
 			return context.RespondText("Youre so cool!")
 		},
 	},

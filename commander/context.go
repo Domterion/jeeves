@@ -5,7 +5,7 @@ import (
 )
 
 // A struct to provide useful information to command run functions
-type Context struct {
+type CommandContext struct {
 	Session         *discordgo.Session                                   // A pointer to the discordgo session
 	Event           *discordgo.InteractionCreate                         // A pointer to the event that triggered the command
 	Manager         *Manager                                             // A pointer to the command manager
@@ -13,21 +13,6 @@ type Context struct {
 	Options         []*discordgo.ApplicationCommandInteractionDataOption // The options the user passed
 	ResolvedOptions *discordgo.ApplicationCommandInteractionDataResolved // Resolved options from Discord such as user and channel options
 	Member          *discordgo.Member                                    // The member object for the command caller
-}
-
-// Respond to an interaction
-func (c *Context) Respond(response *discordgo.InteractionResponse) error {
-	return c.Session.InteractionRespond(c.Event.Interaction, response)
-}
-
-// Respond to an interaction with plain text
-func (c *Context) RespondText(text string) error {
-	return c.Respond(&discordgo.InteractionResponse{
-		Type: discordgo.InteractionResponseChannelMessageWithSource,
-		Data: &discordgo.InteractionResponseData{
-			Content: text,
-		},
-	})
 }
 
 // A struct to provide useful information to command run functions
@@ -38,6 +23,42 @@ type ComponentContext struct {
 	Name            string                                               // The command name used to invoke the command
 	Member          *discordgo.Member                                    // The member object for the command caller
 }
+
+// Respond to an interaction
+func (c *CommandContext) Respond(response *discordgo.InteractionResponse) error {
+	return c.Session.InteractionRespond(c.Event.Interaction, response)
+}
+
+// Respond to an interaction with plain text
+func (c *CommandContext) RespondText(text string) error {
+	return c.Respond(&discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: text,
+		},
+	})
+}
+
+// Defer a response
+func (c *CommandContext) DeferResponse() error {
+	return c.Respond(&discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
+	})
+}
+
+// Edit a response
+func (c *CommandContext) ResponseEdit(response *discordgo.WebhookEdit) error {
+	_, err := c.Session.InteractionResponseEdit(c.Session.State.User.ID, c.Event.Interaction, response)
+	return err
+}
+
+// Respond to an interaction by editing text
+func (c *CommandContext) ResponseEditText(text string) error {
+	return c.ResponseEdit(&discordgo.WebhookEdit{
+		Content: text,
+	})
+}
+
 
 // Respond to an interaction
 func (c *ComponentContext) Respond(response *discordgo.InteractionResponse) error {
@@ -53,4 +74,3 @@ func (c *ComponentContext) RespondText(text string) error {
 		},
 	})
 }
-

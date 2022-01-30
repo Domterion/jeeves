@@ -39,11 +39,6 @@ type Components struct {
 	components []interface{} // All components the components struct knows of
 }
 
-// TODO: This is just a placeholder, hopefully I figure it out later
-func NewComponents() *Components {
-	return &Components{}
-}
-
 func (c *Components) AddButton(button Button) {
 	c.components = append(c.components, button)
 }

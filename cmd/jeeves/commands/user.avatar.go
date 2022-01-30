@@ -21,7 +21,7 @@ var UserAvatarCommand commander.SubCommand = commander.SubCommand{
 			},
 		},
 		BeforeRun: nil,
-		Run: func(context *commander.Context) error {
+		Run: func(context *commander.CommandContext) error {
 			// userId := context.Options[0].Value
 			// log.Println(userId)
 			// log.Println(context.Event.ApplicationCommandData().Options[0].Options[0].UserValue(nil).AvatarURL(""))

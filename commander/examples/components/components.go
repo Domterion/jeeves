@@ -10,13 +10,14 @@ var PressCommand commander.Command = commander.Command{
 		Name:        "press",
 		Description: "Dont press the button",
 		Type:        discordgo.ChatApplicationCommand,
-		Run: func(context *commander.Context) error {
+		Run: func(context *commander.CommandContext) error {
 			components := commander.Components{}
 
 			actionRow := commander.ActionRow{}
 			actionRow.AddButton(commander.Button{
 				BaseComponent: commander.BaseComponent{
-					CustomID: context.Event.GuildID + ":" + context.Member.User.ID + ":" + "press:button",
+					// We provide a snowflake generator that you can use for custom IDs
+					CustomID: context.Manager.SnowflakeNode.Generate().String(),
 					Run: func(ctx *commander.ComponentContext) error {
 						return ctx.RespondText("You were told not to..")
 					},

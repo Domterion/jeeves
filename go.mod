@@ -9,6 +9,7 @@ require (
 
 require (
 	github.com/bwmarrin/discordgo v0.23.3-0.20211228023845-29269347e820 // indirect
+	github.com/bwmarrin/snowflake v0.3.0 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/yuin/goldmark v1.4.1 // indirect
 	golang.org/x/crypto v0.0.0-20210421170649-83a5a9bb288b // indirect

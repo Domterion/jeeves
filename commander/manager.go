@@ -7,35 +7,40 @@ import (
 	"log"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/bwmarrin/snowflake"
 )
 
 // A struct to hold all data for the manager
 type Manager struct {
-	Session    *discordgo.Session     // The discordgo session to use with registering commands and handling  events
-	commands   map[string]interface{} // All commands registered to the manager, it can be a Command or SubCommand
-	components map[string]interface{} // Component listeners, can be any of Button and SelectMenu
-	options    *Options               // Registered option to act as a configuration
+	Session       *discordgo.Session     // The discordgo session to use with registering commands and handling  events
+	commands      map[string]interface{} // All commands registered to the manager, it can be a Command or SubCommand
+	components    map[string]interface{} // Component listeners, can be any of Button and SelectMenu
+	options       *Options               // Registered option to act as a configuration
+	SnowflakeNode *snowflake.Node
 }
 
 // The options, or configuration, for the manager
 type Options struct {
-	TestGuild      string                            // The ID of a guild to register commands to or empty for global
-	OnCommandError func(err error, context *Context) // The function that is fired when there is an error returned from a command run
+	TestGuild       string                            // The ID of a guild to register commands to or empty for global
+	OnCommandError  func(err error, context *CommandContext) // The function that is fired when there is an error returned from a command run
+	SnowflakeNodeId int64                             // The id to use for the snowflake node
 }
 
 // Construct a new command manager
 func New(session *discordgo.Session, options ...Options) (*Manager, error) {
 	manager := &Manager{
-		Session:    session,
-		commands:   make(map[string]interface{}),
-		components: make(map[string]interface{}),
+		Session:       session,
+		commands:      make(map[string]interface{}),
+		components:    make(map[string]interface{}),
+		SnowflakeNode: nil,
 	}
 
 	manager.options = &Options{
 		TestGuild: "",
-		OnCommandError: func(err error, context *Context) {
+		OnCommandError: func(err error, context *CommandContext) {
 			log.Printf("%v command error: %v", context.Name, err)
 		},
+		SnowflakeNodeId: 1,
 	}
 
 	if len(options) > 0 {
@@ -46,10 +51,20 @@ func New(session *discordgo.Session, options ...Options) (*Manager, error) {
 		if options[0].OnCommandError != nil {
 			manager.options.OnCommandError = options[0].OnCommandError
 		}
+
+		if options[0].SnowflakeNodeId != 0 {
+			manager.options.SnowflakeNodeId = options[0].SnowflakeNodeId
+		}
 	}
 
 	manager.Session.AddHandler(manager.onReady)
 	manager.Session.AddHandler(manager.onInteractionCreate)
+
+	node, err := snowflake.NewNode(manager.options.SnowflakeNodeId)
+	if err != nil {
+		return nil, err
+	}
+	manager.SnowflakeNode = node
 
 	return manager, nil
 }
@@ -172,12 +187,12 @@ func (m *Manager) handleApplicationCommand(s *discordgo.Session, e *discordgo.In
 		log.Fatalf("unsupported command type called..?")
 	}
 
-	context := Context{
+	context := CommandContext{
 		Session:         m.Session,
 		Event:           e,
 		Manager:         m,
 		Options:         e.ApplicationCommandData().Options,
-		Name:     name,
+		Name:            name,
 		ResolvedOptions: e.ApplicationCommandData().Resolved,
 		Member:          e.Member,
 	}
@@ -219,13 +234,14 @@ func (m *Manager) handleMessageComponent(s *discordgo.Session, e *discordgo.Inte
 	}
 
 	context := ComponentContext{
-		Session:         m.Session,
-		Event:           e,
-		Manager:         m,
-		Name:            e.MessageComponentData().CustomID,
-		Member:          e.Member,
+		Session: m.Session,
+		Event:   e,
+		Manager: m,
+		Name:    e.MessageComponentData().CustomID,
+		Member:  e.Member,
 	}
 
+	// TODO: We should handle the error for this somehow
 	componentObject.Run(&context)
 }
 
