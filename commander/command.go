@@ -7,6 +7,7 @@ import (
 )
 
 // TODO: Commands should have a guild ID so specific commands can be guild registered
+// TODO: Commands should have an OnBeforeRunError which is called when BeforeRun is false
 
 // A base command that all commands must implement
 type BaseCommand struct {
@@ -14,7 +15,6 @@ type BaseCommand struct {
 	Description string                                // The description for the command
 	Type        discordgo.ApplicationCommandType      // The type of the command, User, Message or Chat
 	Options     []*discordgo.ApplicationCommandOption // Options for the command
-	BeforeRun   func(context *CommandContext) bool    // The function called before Run, typically used for checks
 	Run         func(context *CommandContext) error   // The handler function for the command
 }
 

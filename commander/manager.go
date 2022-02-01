@@ -21,9 +21,9 @@ type Manager struct {
 
 // The options, or configuration, for the manager
 type Options struct {
-	GuildID       string                            // The ID of a guild to register commands to or empty for global
+	GuildID         string                                   // The ID of a guild to register commands to or empty for global
 	OnCommandError  func(err error, context *CommandContext) // The function that is fired when there is an error returned from a command run
-	SnowflakeNodeId int64                             // The id to use for the snowflake node
+	SnowflakeNodeId int64                                    // The id to use for the snowflake node
 }
 
 // Construct a new command manager
@@ -79,11 +79,6 @@ func (m *Manager) AddCommand(command Command) {
 	for _, subcommand := range command.SubCommands {
 		subCommandName := fmt.Sprintf("%s %s", baseCommandName, subcommand.Name)
 
-		// If the base command has a BeforeRun defined and subcommand doesnt then it will use the base commands BefordRun
-		if command.BeforeRun != nil && subcommand.BeforeRun == nil {
-			subcommand.BeforeRun = command.BeforeRun
-		}
-
 		m.commands[subCommandName] = subcommand
 		// log.Printf("subcommand %s added", subCommandName)
 	}
@@ -92,18 +87,7 @@ func (m *Manager) AddCommand(command Command) {
 		subCommandGroupName := fmt.Sprintf("%s %s", baseCommandName, subcommandgroup.Name)
 		// log.Printf("on subcommandGroup %s", subCommandGroupName)
 
-		// If the base command has a BeforeRun defined but the group doesnt then it will use the base commmands
-		if command.BeforeRun != nil && subcommandgroup.BeforeRun == nil {
-			subcommandgroup.BeforeRun = command.BeforeRun
-		}
-
 		for _, subcommand := range subcommandgroup.SubCommands {
-
-			// If the subcommandgroup has a BeforeRun defined but the subcommand doesnt then it will use the groups
-			if subcommandgroup.BeforeRun != nil && subcommand.BeforeRun == nil {
-				subcommand.BeforeRun = subcommandgroup.BeforeRun
-			}
-
 			subCommandName := fmt.Sprintf("%s %s", subCommandGroupName, subcommand.Name)
 			m.commands[subCommandName] = subcommand
 			// log.Printf("subcommand %s added in group", subCommandName)
@@ -195,14 +179,6 @@ func (m *Manager) handleApplicationCommand(s *discordgo.Session, e *discordgo.In
 		Name:            name,
 		ResolvedOptions: e.ApplicationCommandData().Resolved,
 		Member:          e.Member,
-	}
-
-	if commandObject.BeforeRun != nil {
-		before := commandObject.BeforeRun(&context)
-
-		if !before {
-			return
-		}
 	}
 
 	err := commandObject.Run(&context)

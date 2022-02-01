@@ -2,12 +2,28 @@ package database
 
 import (
 	"context"
+	"errors"
 
+	"github.com/jackc/pgtype"
+	pgtypeuuid "github.com/jackc/pgtype/ext/gofrs-uuid"
 	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v4/pgxpool"
 )
 
-func Connect(connectionUri string) (*pgx.Conn, error) {
-	conn, err := pgx.Connect(context.Background(), connectionUri)
+var Pool *pgxpool.Pool
 
-	return conn, err
+func Connect(connectionUri string) error {
+	err := errors.New("this is needed so err is already defined, yay")
+	Pool, err = pgxpool.Connect(context.Background(), connectionUri)
+
+	Pool.Config().AfterConnect = func(ctx context.Context, conn *pgx.Conn) error {
+		conn.ConnInfo().RegisterDataType(pgtype.DataType{
+			Value: &pgtypeuuid.UUID{},
+			Name:  "uuid",
+			OID:   pgtype.UUIDOID,
+		})
+		return nil
+	}
+
+	return err
 }

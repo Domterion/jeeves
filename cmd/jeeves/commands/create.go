@@ -3,6 +3,9 @@ package commands
 import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/domterion/jeeves/commander"
+	"github.com/domterion/jeeves/database"
+	"github.com/jackc/pgtype/ext/gofrs-uuid"
+	"github.com/jackc/pgx/v4"
 )
 
 var CreateCommand commander.Command = commander.Command{
@@ -10,11 +13,28 @@ var CreateCommand commander.Command = commander.Command{
 		Name:        "create",
 		Description: "Start your space exploration adventure!",
 		Type:        discordgo.ChatApplicationCommand,
-		BeforeRun: func(context *commander.CommandContext) bool {
-			// TODO: Once we get this database connected we will do the character check here
-			return true
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Type:        discordgo.ApplicationCommandOptionString,
+				Name:        "name",
+				Description: "The name of your character",
+				Required:    true,
+			},
 		},
 		Run: func(context *commander.CommandContext) error {
+			var (
+				u int64
+				i uuid.UUID
+				n string
+				s int64
+			)
+
+			err := database.SelectCharacter(context.Member.User.ID, &u, &i, &n, &s)
+
+			if err != pgx.ErrNoRows {
+				return context.RespondText("You already have a character!")
+			}
+
 			components := commander.Components{}
 
 			actionRow := commander.ActionRow{}
@@ -22,6 +42,16 @@ var CreateCommand commander.Command = commander.Command{
 				BaseComponent: commander.BaseComponent{
 					CustomID: context.Manager.SnowflakeNode.Generate().String(),
 					Run: func(ctx *commander.ComponentContext) error {
+						name := context.Event.ApplicationCommandData().Options[0].StringValue()
+						err := database.InsertCharacter(ctx.Member.User.ID, name)
+
+						if err != nil {
+							return context.ResponseEdit(&discordgo.WebhookEdit{
+								Content:    "Err creating character:\n" + err.Error(),
+								Components: []discordgo.MessageComponent{},
+							})
+						}
+
 						return context.ResponseEdit(&discordgo.WebhookEdit{
 							Content:    "Creating character!",
 							Components: []discordgo.MessageComponent{},

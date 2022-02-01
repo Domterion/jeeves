@@ -10,10 +10,7 @@ import (
 	"github.com/domterion/jeeves/commander"
 	"github.com/domterion/jeeves/common/config"
 	"github.com/domterion/jeeves/database"
-	"github.com/jackc/pgx/v4"
 )
-
-var Db *pgx.Conn
 
 func main() {
 	if err := config.Load(); err != nil {
@@ -44,17 +41,19 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to open session: %v", err)
 	}
+	defer discord.Close()
 
-	Db, err = database.Connect(config.Config.DatabaseUri)
+	err = database.Connect(config.Config.DatabaseUri)
 
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
 
-	defer discord.Close()
-
 	stop := make(chan os.Signal)
 	signal.Notify(stop, os.Interrupt)
 	<-stop
+
+	// Do our cleanup stuff here
 	log.Println("Gracefully shutting down..")
+	database.Pool.Close()
 }

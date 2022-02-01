@@ -20,7 +20,6 @@ var UserAvatarCommand commander.SubCommand = commander.SubCommand{
 				Required:    true,
 			},
 		},
-		BeforeRun: nil,
 		Run: func(context *commander.CommandContext) error {
 			// userId := context.Options[0].Value
 			// log.Println(userId)
