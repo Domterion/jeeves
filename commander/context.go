@@ -4,6 +4,8 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+// TODO: In the Context there should be a Data field that allows for any data, useful for stuff like databases
+
 // A struct to provide useful information to command run functions
 type CommandContext struct {
 	Session         *discordgo.Session                                   // A pointer to the discordgo session
@@ -17,11 +19,11 @@ type CommandContext struct {
 
 // A struct to provide useful information to command run functions
 type ComponentContext struct {
-	Session         *discordgo.Session                                   // A pointer to the discordgo session
-	Event           *discordgo.InteractionCreate                         // A pointer to the event that triggered the command
-	Manager         *Manager                                             // A pointer to the command manager
-	Name            string                                               // The command name used to invoke the command
-	Member          *discordgo.Member                                    // The member object for the command caller
+	Session *discordgo.Session           // A pointer to the discordgo session
+	Event   *discordgo.InteractionCreate // A pointer to the event that triggered the command
+	Manager *Manager                     // A pointer to the command manager
+	Name    string                       // The command name used to invoke the command
+	Member  *discordgo.Member            // The member object for the command caller
 }
 
 // Respond to an interaction
@@ -58,7 +60,6 @@ func (c *CommandContext) ResponseEditText(text string) error {
 		Content: text,
 	})
 }
-
 
 // Respond to an interaction
 func (c *ComponentContext) Respond(response *discordgo.InteractionResponse) error {

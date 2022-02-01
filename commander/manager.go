@@ -21,7 +21,7 @@ type Manager struct {
 
 // The options, or configuration, for the manager
 type Options struct {
-	TestGuild       string                            // The ID of a guild to register commands to or empty for global
+	GuildID       string                            // The ID of a guild to register commands to or empty for global
 	OnCommandError  func(err error, context *CommandContext) // The function that is fired when there is an error returned from a command run
 	SnowflakeNodeId int64                             // The id to use for the snowflake node
 }
@@ -36,7 +36,7 @@ func New(session *discordgo.Session, options ...Options) (*Manager, error) {
 	}
 
 	manager.options = &Options{
-		TestGuild: "",
+		GuildID: "",
 		OnCommandError: func(err error, context *CommandContext) {
 			log.Printf("%v command error: %v", context.Name, err)
 		},
@@ -44,8 +44,8 @@ func New(session *discordgo.Session, options ...Options) (*Manager, error) {
 	}
 
 	if len(options) > 0 {
-		if options[0].TestGuild != "" {
-			manager.options.TestGuild = options[0].TestGuild
+		if options[0].GuildID != "" {
+			manager.options.GuildID = options[0].GuildID
 		}
 
 		if options[0].OnCommandError != nil {
@@ -143,7 +143,7 @@ func (m *Manager) onReady(s *discordgo.Session, e *discordgo.Ready) {
 	for _, command := range m.commands {
 		switch c := command.(type) {
 		case Command:
-			_, err := m.Session.ApplicationCommandCreate(m.Session.State.User.ID, m.options.TestGuild, c.ToApplicationCommand())
+			_, err := m.Session.ApplicationCommandCreate(m.Session.State.User.ID, m.options.GuildID, c.ToApplicationCommand())
 
 			if err != nil {
 				log.Printf("failed to register %v command: %v", c.Name, err)

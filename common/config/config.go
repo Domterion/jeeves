@@ -6,7 +6,8 @@ import (
 )
 
 type config struct {
-	Token string `env:"TOKEN"`
+	Token    string `env:"TOKEN"`
+	DatabaseUri string `env:"DATABASE_URI"`
 }
 
 var Config config

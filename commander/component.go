@@ -4,8 +4,8 @@ import "github.com/bwmarrin/discordgo"
 
 // A struct that all components must implement
 type BaseComponent struct {
-	CustomID string                       // A unique string to identify the component internally and with Discord
-	Disabled bool                         // If the component is disabled or not
+	CustomID string                                // A unique string to identify the component internally and with Discord
+	Disabled bool                                  // If the component is disabled or not
 	Run      func(context *ComponentContext) error // The handler function for the component
 }
 

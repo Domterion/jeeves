@@ -7,20 +7,22 @@ import (
 )
 
 // TODO: Commands should have a guild ID so specific commands can be guild registered
+
 // A base command that all commands must implement
 type BaseCommand struct {
 	Name        string                                // The name of the command to register with Discord
 	Description string                                // The description for the command
 	Type        discordgo.ApplicationCommandType      // The type of the command, User, Message or Chat
 	Options     []*discordgo.ApplicationCommandOption // Options for the command
-	BeforeRun   func(context *CommandContext) bool           // The function called before Run, typically used for checks
-	Run         func(context *CommandContext) error          // The handler function for the command
+	BeforeRun   func(context *CommandContext) bool    // The function called before Run, typically used for checks
+	Run         func(context *CommandContext) error   // The handler function for the command
 }
 
 // A root command
 type Command struct {
 	BaseCommand
 
+	GuildID          string             // The guild id to register the command to
 	SubCommands      []*SubCommand      // A slice of subcommands for this root command
 	SubCommandGroups []*SubCommandGroup // A slice of subcommand groups for this command
 }

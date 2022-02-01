@@ -9,7 +9,11 @@ import (
 	"github.com/domterion/jeeves/cmd/jeeves/commands"
 	"github.com/domterion/jeeves/commander"
 	"github.com/domterion/jeeves/common/config"
+	"github.com/domterion/jeeves/database"
+	"github.com/jackc/pgx/v4"
 )
+
+var Db *pgx.Conn
 
 func main() {
 	if err := config.Load(); err != nil {
@@ -26,22 +30,25 @@ func main() {
 		log.Println("Bot is ready!")
 	})
 
-	commandManager, err := commander.New(discord, commander.Options{
-		TestGuild: "897619857187676210",
+	commander, err := commander.New(discord, commander.Options{
+		GuildID: "897619857187676210",
 	})
+
 	if err != nil {
 		log.Fatalf("Failed to create command manager: %v", err)
 	}
 
-	commandManager.AddCommand(commands.PingCommand)
-	commandManager.AddCommand(commands.SayCommand)
-	commandManager.AddCommand(commands.UserCommand)
-	commandManager.AddCommand(commands.UserInfoCommand)
-	commandManager.AddCommand(commands.TestCommand)
+	commander.AddCommand(commands.CreateCommand)
 
 	err = discord.Open()
 	if err != nil {
 		log.Fatalf("Failed to open session: %v", err)
+	}
+
+	Db, err = database.Connect(config.Config.DatabaseUri)
+
+	if err != nil {
+		log.Fatalf("Failed to connect to database: %v", err)
 	}
 
 	defer discord.Close()
