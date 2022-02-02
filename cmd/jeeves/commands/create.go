@@ -32,7 +32,13 @@ var CreateCommand commander.Command = commander.Command{
 			err := database.SelectCharacter(context.Member.User.ID, &u, &i, &n, &s)
 
 			if err != pgx.ErrNoRows {
-				return context.RespondText("You already have a character!")
+				return context.Respond(&discordgo.InteractionResponse{
+					Type: discordgo.InteractionResponseChannelMessageWithSource,
+					Data: &discordgo.InteractionResponseData{
+						Content: "You already have a character!",
+						Flags:   1 << 6,
+					},
+				})
 			}
 
 			components := commander.Components{}
@@ -43,6 +49,7 @@ var CreateCommand commander.Command = commander.Command{
 					CustomID: context.Manager.SnowflakeNode.Generate().String(),
 					Run: func(ctx *commander.ComponentContext) error {
 						name := context.Event.ApplicationCommandData().Options[0].StringValue()
+
 						err := database.InsertCharacter(ctx.Member.User.ID, name)
 
 						if err != nil {
@@ -52,8 +59,15 @@ var CreateCommand commander.Command = commander.Command{
 							})
 						}
 
+						msg := `Your space exploration journey starts here!
+
+I am **Jeeves**, your captain! I'll help guide you through this journey. 
+
+You have **50** SPC, formally known as Specks or the currency, to start.
+`
+
 						return context.ResponseEdit(&discordgo.WebhookEdit{
-							Content:    "Creating character!",
+							Content:    msg,
 							Components: []discordgo.MessageComponent{},
 						})
 					},
@@ -86,7 +100,8 @@ var CreateCommand commander.Command = commander.Command{
 			components.AddActionRow(actionRow)
 			context.Manager.AddComponents(components)
 
-			rules := `**Bot Rules**
+			msg := `**Bot Rules**
+			
 Following bot rules is a must and failure to do so will result in punishment. You are responsible for keeping up with the rules and following them.
 
 **1**) No alting or multi-accounting. You are allowed **ONE** character. 
@@ -101,7 +116,7 @@ Following bot rules is a must and failure to do so will result in punishment. Yo
 			return context.Respond(&discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseChannelMessageWithSource,
 				Data: &discordgo.InteractionResponseData{
-					Content:    rules,
+					Content:    msg,
 					Flags:      1 << 6,
 					Components: components.ToMessageComponent(),
 				},

@@ -41,30 +41,6 @@ Rocket ships can also be called rockets or ships
 
 The currency is specks or SPC but is also referred to as money, cash or currency
 
-# Thoughts
+# Todo
 
-The `handler`, aka the command handler, should define three different command interface: `Command`, `SubCommmand` and `SubCommandGroup`. 
 
-All commands must have a `Name() string`, `Description() string` and `Run(context *handler.Context) error` functions
-
-The type of the command will be determine by the functions defined:
-
-`Command` has `SubCommands() *[]SubCommand` and `SubCommandGroups() *[]SubCommandGroup`
-
-`SubCommandGroup` has `SubCommands() *[]SubCommand`
-
-`SubCommand` has none
-
-...so basically the above was scrapped because using interfaces doesnt work the best for this. It now uses structs and is fully working, I hope atleast...
-
-Next we are on to storage of commands which should be simple enough...
-
-...well, it wasnt as simple as I thought but `interface{}` is beautiful when used properly but now you can call `RegisterCommand` and itll store all commands and subcommands in a `map[string]interface{}`. 
-
-the manager now binds to `onReady()` and automatically registers commands on ready!
-
-now the command handler has a name, Commander! slash command support is almost done and soon to handling interactions now the command handler has a name, Commander! slash command support is almost done and soon to handling message components 😋
-
-...prepare for loose thoughts about message components!
-
-basically when you "build" a component, say a button, it will register it with its `CustomID` to a group of listeners that will point back to the component
