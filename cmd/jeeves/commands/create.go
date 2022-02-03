@@ -1,11 +1,11 @@
 package commands
 
 import (
+	"database/sql"
+
 	"github.com/bwmarrin/discordgo"
 	"github.com/domterion/jeeves/commander"
 	"github.com/domterion/jeeves/database"
-	"github.com/jackc/pgtype/ext/gofrs-uuid"
-	"github.com/jackc/pgx/v4"
 )
 
 var CreateCommand commander.Command = commander.Command{
@@ -22,16 +22,10 @@ var CreateCommand commander.Command = commander.Command{
 			},
 		},
 		Run: func(context *commander.CommandContext) error {
-			var (
-				u int64
-				i uuid.UUID
-				n string
-				s int64
-			)
 
-			err := database.SelectCharacter(context.Member.User.ID, &u, &i, &n, &s)
+			_, err := database.GetCharacter(context.Member.User.ID)
 
-			if err != pgx.ErrNoRows {
+			if err != sql.ErrNoRows {
 				return context.Respond(&discordgo.InteractionResponse{
 					Type: discordgo.InteractionResponseChannelMessageWithSource,
 					Data: &discordgo.InteractionResponseData{
@@ -50,7 +44,7 @@ var CreateCommand commander.Command = commander.Command{
 					Run: func(ctx *commander.ComponentContext) error {
 						name := context.Event.ApplicationCommandData().Options[0].StringValue()
 
-						err := database.InsertCharacter(ctx.Member.User.ID, name)
+						err := database.InsertCharacter(context.Member.User.ID, name, 0)
 
 						if err != nil {
 							return context.ResponseEdit(&discordgo.WebhookEdit{

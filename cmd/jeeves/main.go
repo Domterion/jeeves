@@ -55,5 +55,5 @@ func main() {
 
 	// Do our cleanup stuff here
 	log.Println("Gracefully shutting down..")
-	database.Pool.Close()
+	database.Db.Close()
 }
