@@ -36,6 +36,7 @@ func main() {
 	}
 
 	commander.AddCommand(commands.CreateCommand)
+	commander.AddCommand(commands.ProfileCommand)
 
 	err = discord.Open()
 	if err != nil {

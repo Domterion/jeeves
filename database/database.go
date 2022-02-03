@@ -31,6 +31,7 @@ func Connect(connectionUri string) error {
 
 	Db = bun.NewDB(db, pgdialect.New())
 
+	// TODO: We need to remove this query hook when we are confident
 	Db.AddQueryHook(bundebug.NewQueryHook(
 		bundebug.WithVerbose(true),
 		bundebug.FromEnv("BUNDEBUG"),

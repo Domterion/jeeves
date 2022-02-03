@@ -40,7 +40,3 @@ Enemies are sometimes referred to as invaders and will attack your ship to steal
 Rocket ships can also be called rockets or ships
 
 The currency is specks or SPC but is also referred to as money, cash or currency
-
-# Todo
-
-

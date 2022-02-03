@@ -21,20 +21,16 @@ var CreateCommand commander.Command = commander.Command{
 				Required:    true,
 			},
 		},
-		Run: func(context *commander.CommandContext) error {
+		BeforeRun: func(context *commander.CommandContext) bool {
+			if _, err := database.GetCharacter(context.Member.User.ID); err != sql.ErrNoRows {
+				context.RespondTextEphemeral("You already have a character!")
 
-			_, err := database.GetCharacter(context.Member.User.ID)
-
-			if err != sql.ErrNoRows {
-				return context.Respond(&discordgo.InteractionResponse{
-					Type: discordgo.InteractionResponseChannelMessageWithSource,
-					Data: &discordgo.InteractionResponseData{
-						Content: "You already have a character!",
-						Flags:   1 << 6,
-					},
-				})
+				return false
 			}
 
+			return true
+		},
+		Run: func(context *commander.CommandContext) error {
 			components := commander.Components{}
 
 			actionRow := commander.ActionRow{}

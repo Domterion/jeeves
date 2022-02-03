@@ -29,7 +29,7 @@ more examples can be found in `examples/`
 
 # TODO
 
-- [ ] Interaction handling such as buttons, currently only slash commands are supported and handled.
+- [x] Interaction handling such as buttons
 - [ ] More concise error handling and reporting
 - [ ] Move commander to a separate repository and make it a proper package
 

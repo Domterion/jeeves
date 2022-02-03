@@ -41,6 +41,17 @@ func (c *CommandContext) RespondText(text string) error {
 	})
 }
 
+// Respond to an interaction with plain text but an ephemeral message
+func (c *CommandContext) RespondTextEphemeral(text string) error {
+	return c.Respond(&discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Flags: 1 << 6,
+			Content: text,
+		},
+	})
+}
+
 // Defer a response
 func (c *CommandContext) DeferResponse() error {
 	return c.Respond(&discordgo.InteractionResponse{
