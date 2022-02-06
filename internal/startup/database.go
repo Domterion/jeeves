@@ -4,6 +4,7 @@ import (
 	"database/sql"
 
 	"github.com/domterion/jeeves/internal/models"
+	"github.com/domterion/jeeves/internal/utils"
 	"github.com/sarulabs/di/v2"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
@@ -12,7 +13,7 @@ import (
 )
 
 func InitDatabase(container di.Container) (*bun.DB, error) {
-	config := container.Get("config").(*models.Config)
+	config := container.Get(utils.DIConfig).(*models.Config)
 	opened, err := sql.Open("pg", config.DatabaseUri)
 
 	if err != nil {

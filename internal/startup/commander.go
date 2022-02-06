@@ -3,6 +3,7 @@ package startup
 import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/domterion/jeeves/cmd/jeeves/commands"
+	"github.com/domterion/jeeves/internal/utils"
 	"github.com/domterion/jeeves/pkg/commander"
 	"github.com/sarulabs/di/v2"
 )
@@ -10,7 +11,7 @@ import (
 var commandSlice = []commander.Command{commands.CreateCommand, commands.ProfileCommand}
 
 func InitCommander(container di.Container) (*commander.Manager, error) {
-	discord := container.Get("discord").(*discordgo.Session)
+	discord := container.Get(utils.DIDiscord).(*discordgo.Session)
 	commander, err := commander.New(discord, commander.Options{
 		GuildID:            "897619857187676210",
 		DependencyProvider: container,

@@ -5,11 +5,12 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/domterion/jeeves/internal/models"
+	"github.com/domterion/jeeves/internal/utils"
 	"github.com/sarulabs/di/v2"
 )
 
 func InitDiscord(container di.Container) (*discordgo.Session, error) {
-	config := container.Get("config").(*models.Config)
+	config := container.Get(utils.DIDiscord).(*models.Config)
 
 	discord, err := discordgo.New("Bot " + config.Token)
 	if err != nil {

@@ -7,6 +7,7 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/domterion/jeeves/internal/startup"
+	"github.com/domterion/jeeves/internal/utils"
 	"github.com/domterion/jeeves/pkg/commander"
 	"github.com/sarulabs/di/v2"
 	"github.com/uptrace/bun"
@@ -16,7 +17,7 @@ func main() {
 	builder, _ := di.NewBuilder()
 
 	builder.Add(di.Def{
-		Name: "config",
+		Name: utils.DIConfig,
 		Build: func(container di.Container) (interface{}, error) {
 			c, err := startup.InitConfig()
 			if err != nil {
@@ -27,7 +28,7 @@ func main() {
 	})
 
 	builder.Add(di.Def{
-		Name: "database",
+		Name: utils.DIDatabase,
 		Build: func(container di.Container) (interface{}, error) {
 			c, err := startup.InitDatabase(container)
 			if err != nil {
@@ -43,7 +44,7 @@ func main() {
 	})
 
 	builder.Add(di.Def{
-		Name: "discord",
+		Name: utils.DIDiscord,
 		Build: func(container di.Container) (interface{}, error) {
 			c, err := startup.InitDiscord(container)
 			if err != nil {
@@ -59,7 +60,7 @@ func main() {
 	})
 
 	builder.Add(di.Def{
-		Name: "commander",
+		Name: utils.DICommander,
 		Build: func(container di.Container) (interface{}, error) {
 			c, err := startup.InitCommander(container)
 			if err != nil {
@@ -71,8 +72,8 @@ func main() {
 
 	container := builder.Build()
 
-	_ = container.Get("discord").(*discordgo.Session)
-	_ = container.Get("commander").(*commander.Manager)
+	_ = container.Get(utils.DIDiscord).(*discordgo.Session)
+	_ = container.Get(utils.DICommander).(*commander.Manager)
 
 	log.Println("Starting!")
 

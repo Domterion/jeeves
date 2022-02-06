@@ -23,7 +23,7 @@ var CreateCommand commander.Command = commander.Command{
 			},
 		},
 		BeforeRun: func(context *commander.CommandContext) bool {
-			database := context.Get("database").(*bun.DB)
+			database := context.Get(utils.DIDatabase).(*bun.DB)
 
 			if _, err := utils.GetCharacter(database, context.Member.User.ID); err != sql.ErrNoRows {
 				context.RespondTextEphemeral("You already have a character!")
@@ -43,7 +43,7 @@ var CreateCommand commander.Command = commander.Command{
 					Run: func(ctx *commander.ComponentContext) error {
 						name := context.Event.ApplicationCommandData().Options[0].StringValue()
 
-						database := context.Get("database").(*bun.DB)
+						database := context.Get(utils.DIDatabase).(*bun.DB)
 						err := utils.InsertCharacter(database, context.Member.User.ID, name, 0)
 
 						if err != nil {

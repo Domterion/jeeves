@@ -1,0 +1,80 @@
+# github.com/bwmarrin/discordgo v0.23.3-0.20211228023845-29269347e820
+## explicit; go 1.13
+github.com/bwmarrin/discordgo
+# github.com/bwmarrin/snowflake v0.3.0
+## explicit
+github.com/bwmarrin/snowflake
+# github.com/caarlos0/env/v6 v6.9.1
+## explicit; go 1.17
+github.com/caarlos0/env/v6
+# github.com/fatih/color v1.13.0
+## explicit; go 1.13
+github.com/fatih/color
+# github.com/google/uuid v1.3.0
+## explicit
+github.com/google/uuid
+# github.com/gorilla/websocket v1.4.2
+## explicit; go 1.12
+github.com/gorilla/websocket
+# github.com/jinzhu/inflection v1.0.0
+## explicit
+github.com/jinzhu/inflection
+# github.com/joho/godotenv v1.4.0
+## explicit; go 1.12
+github.com/joho/godotenv
+# github.com/mattn/go-colorable v0.1.12
+## explicit; go 1.13
+github.com/mattn/go-colorable
+# github.com/mattn/go-isatty v0.0.14
+## explicit; go 1.12
+github.com/mattn/go-isatty
+# github.com/sarulabs/di/v2 v2.4.2
+## explicit
+github.com/sarulabs/di/v2
+# github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc
+## explicit
+github.com/tmthrgd/go-hex
+# github.com/uptrace/bun v1.0.22
+## explicit; go 1.17
+github.com/uptrace/bun
+github.com/uptrace/bun/dialect
+github.com/uptrace/bun/dialect/feature
+github.com/uptrace/bun/dialect/sqltype
+github.com/uptrace/bun/extra/bunjson
+github.com/uptrace/bun/internal
+github.com/uptrace/bun/internal/parser
+github.com/uptrace/bun/internal/tagparser
+github.com/uptrace/bun/schema
+# github.com/uptrace/bun/dialect/pgdialect v1.0.22
+## explicit; go 1.17
+github.com/uptrace/bun/dialect/pgdialect
+# github.com/uptrace/bun/driver/pgdriver v1.0.22
+## explicit; go 1.17
+github.com/uptrace/bun/driver/pgdriver
+# github.com/uptrace/bun/extra/bundebug v1.0.22
+## explicit; go 1.17
+github.com/uptrace/bun/extra/bundebug
+# github.com/vmihailenco/msgpack/v5 v5.3.5
+## explicit; go 1.11
+github.com/vmihailenco/msgpack/v5
+github.com/vmihailenco/msgpack/v5/msgpcode
+# github.com/vmihailenco/tagparser/v2 v2.0.0
+## explicit; go 1.15
+github.com/vmihailenco/tagparser/v2
+github.com/vmihailenco/tagparser/v2/internal
+github.com/vmihailenco/tagparser/v2/internal/parser
+# golang.org/x/crypto v0.0.0-20220131195533-30dcbda58838
+## explicit; go 1.17
+golang.org/x/crypto/internal/poly1305
+golang.org/x/crypto/internal/subtle
+golang.org/x/crypto/nacl/secretbox
+golang.org/x/crypto/pbkdf2
+golang.org/x/crypto/salsa20/salsa
+# golang.org/x/sys v0.0.0-20220114195835-da31bd327af9
+## explicit; go 1.17
+golang.org/x/sys/cpu
+golang.org/x/sys/internal/unsafeheader
+golang.org/x/sys/unix
+# mellium.im/sasl v0.2.1
+## explicit
+mellium.im/sasl

@@ -16,7 +16,7 @@ var ProfileCommand commander.Command = commander.Command{
 		Description: "View your profile",
 		Type:        discordgo.ChatApplicationCommand,
 		BeforeRun: func(context *commander.CommandContext) bool {
-			database := context.Get("database").(*bun.DB)
+			database := context.Get(utils.DIDatabase).(*bun.DB)
 			if _, err := utils.GetCharacter(database, context.Member.User.ID); err == sql.ErrNoRows {
 				context.RespondTextEphemeral("You need a character for this command..")
 
@@ -26,7 +26,7 @@ var ProfileCommand commander.Command = commander.Command{
 			return true
 		},
 		Run: func(context *commander.CommandContext) error {
-			database := context.Get("database").(*bun.DB)
+			database := context.Get(utils.DIDatabase).(*bun.DB)
 			character, _ := utils.GetCharacter(database, context.Member.User.ID)
 
 			description := fmt.Sprintf(`**Name**: %s
