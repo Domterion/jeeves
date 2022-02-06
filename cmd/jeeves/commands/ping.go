@@ -2,7 +2,7 @@ package commands
 
 import (
 	"github.com/bwmarrin/discordgo"
-	"github.com/domterion/jeeves/commander"
+	"github.com/domterion/jeeves/pkg/commander"
 )
 
 var PingCommand commander.Command = commander.Command{

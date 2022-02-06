@@ -4,8 +4,9 @@ import (
 	"database/sql"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/domterion/jeeves/commander"
-	"github.com/domterion/jeeves/database"
+	"github.com/domterion/jeeves/internal/utils"
+	"github.com/domterion/jeeves/pkg/commander"
+	"github.com/uptrace/bun"
 )
 
 var CreateCommand commander.Command = commander.Command{
@@ -22,7 +23,9 @@ var CreateCommand commander.Command = commander.Command{
 			},
 		},
 		BeforeRun: func(context *commander.CommandContext) bool {
-			if _, err := database.GetCharacter(context.Member.User.ID); err != sql.ErrNoRows {
+			database := context.Get("database").(*bun.DB)
+
+			if _, err := utils.GetCharacter(database, context.Member.User.ID); err != sql.ErrNoRows {
 				context.RespondTextEphemeral("You already have a character!")
 
 				return false
@@ -40,7 +43,8 @@ var CreateCommand commander.Command = commander.Command{
 					Run: func(ctx *commander.ComponentContext) error {
 						name := context.Event.ApplicationCommandData().Options[0].StringValue()
 
-						err := database.InsertCharacter(context.Member.User.ID, name, 0)
+						database := context.Get("database").(*bun.DB)
+						err := utils.InsertCharacter(database, context.Member.User.ID, name, 0)
 
 						if err != nil {
 							return context.ResponseEdit(&discordgo.WebhookEdit{

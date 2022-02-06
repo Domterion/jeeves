@@ -6,55 +6,79 @@ import (
 	"os/signal"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/domterion/jeeves/cmd/jeeves/commands"
-	"github.com/domterion/jeeves/commander"
-	"github.com/domterion/jeeves/common/config"
-	"github.com/domterion/jeeves/database"
+	"github.com/domterion/jeeves/internal/startup"
+	"github.com/domterion/jeeves/pkg/commander"
+	"github.com/sarulabs/di/v2"
+	"github.com/uptrace/bun"
 )
 
 func main() {
-	if err := config.Load(); err != nil {
-		log.Fatalf("Failed to load config: %v", err)
-	}
+	builder, _ := di.NewBuilder()
 
-	discord, err := discordgo.New("Bot " + config.Config.Token)
-
-	if err != nil {
-		log.Fatalf("Failed to create discordgo client: %v", err)
-	}
-
-	discord.AddHandler(func(s *discordgo.Session, e *discordgo.Ready) {
-		log.Println("Bot is ready!")
+	builder.Add(di.Def{
+		Name: "config",
+		Build: func(container di.Container) (interface{}, error) {
+			c, err := startup.InitConfig()
+			if err != nil {
+				log.Fatalf("Error initializing config: %v\n", err)
+			}
+			return c, err
+		},
 	})
 
-	commander, err := commander.New(discord, commander.Options{
-		GuildID: "897619857187676210",
+	builder.Add(di.Def{
+		Name: "database",
+		Build: func(container di.Container) (interface{}, error) {
+			c, err := startup.InitDatabase(container)
+			if err != nil {
+				log.Fatalf("Error initializing database: %v\n", err)
+			}
+			return c, err
+		},
+		Close: func(obj interface{}) error {
+			db := obj.(*bun.DB)
+			db.Close()
+			return nil
+		},
 	})
 
-	if err != nil {
-		log.Fatalf("Failed to create command manager: %v", err)
-	}
+	builder.Add(di.Def{
+		Name: "discord",
+		Build: func(container di.Container) (interface{}, error) {
+			c, err := startup.InitDiscord(container)
+			if err != nil {
+				log.Fatalf("Error initializing discord: %v\n", err)
+			}
+			return c, err
+		},
+		Close: func(obj interface{}) error {
+			discord := obj.(*discordgo.Session)
+			discord.Close()
+			return nil
+		},
+	})
 
-	commander.AddCommand(commands.CreateCommand)
-	commander.AddCommand(commands.ProfileCommand)
+	builder.Add(di.Def{
+		Name: "commander",
+		Build: func(container di.Container) (interface{}, error) {
+			c, err := startup.InitCommander(container)
+			if err != nil {
+				log.Fatalf("Error initializing commander: %v\n", err)
+			}
+			return c, err
+		},
+	})
 
-	err = discord.Open()
-	if err != nil {
-		log.Fatalf("Failed to open session: %v", err)
-	}
-	defer discord.Close()
+	container := builder.Build()
 
-	err = database.Connect(config.Config.DatabaseUri)
+	_ = container.Get("discord").(*discordgo.Session)
+	_ = container.Get("commander").(*commander.Manager)
 
-	if err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
-	}
+	log.Println("Starting!")
 
 	stop := make(chan os.Signal)
 	signal.Notify(stop, os.Interrupt)
 	<-stop
 
-	// Do our cleanup stuff here
-	log.Println("Gracefully shutting down..")
-	database.Db.Close()
+	container.DeleteWithSubContainers()
 }

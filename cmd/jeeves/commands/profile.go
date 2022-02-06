@@ -5,8 +5,9 @@ import (
 	"fmt"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/domterion/jeeves/commander"
-	"github.com/domterion/jeeves/database"
+	"github.com/domterion/jeeves/internal/utils"
+	"github.com/domterion/jeeves/pkg/commander"
+	"github.com/uptrace/bun"
 )
 
 var ProfileCommand commander.Command = commander.Command{
@@ -15,7 +16,8 @@ var ProfileCommand commander.Command = commander.Command{
 		Description: "View your profile",
 		Type:        discordgo.ChatApplicationCommand,
 		BeforeRun: func(context *commander.CommandContext) bool {
-			if _, err := database.GetCharacter(context.Member.User.ID); err == sql.ErrNoRows {
+			database := context.Get("database").(*bun.DB)
+			if _, err := utils.GetCharacter(database, context.Member.User.ID); err == sql.ErrNoRows {
 				context.RespondTextEphemeral("You need a character for this command..")
 
 				return false
@@ -24,7 +26,8 @@ var ProfileCommand commander.Command = commander.Command{
 			return true
 		},
 		Run: func(context *commander.CommandContext) error {
-			character, _ := database.GetCharacter(context.Member.User.ID)
+			database := context.Get("database").(*bun.DB)
+			character, _ := utils.GetCharacter(database, context.Member.User.ID)
 
 			description := fmt.Sprintf(`**Name**: %s
 **Specks** (**SPC**): %d

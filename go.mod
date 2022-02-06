@@ -6,6 +6,7 @@ require (
 	github.com/caarlos0/env/v6 v6.9.1
 	github.com/google/uuid v1.3.0
 	github.com/joho/godotenv v1.4.0
+	github.com/sarulabs/di/v2 v2.4.2
 	github.com/uptrace/bun v1.0.22
 	github.com/uptrace/bun/driver/pgdriver v1.0.22
 )

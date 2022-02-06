@@ -19,11 +19,16 @@ type Manager struct {
 	SnowflakeNode *snowflake.Node
 }
 
+type Provider interface {
+	Get(key string) interface{}
+}
+
 // The options, or configuration, for the manager
 type Options struct {
-	GuildID         string                                   // The ID of a guild to register commands to or empty for global
-	OnCommandError  func(err error, context *CommandContext) // The function that is fired when there is an error returned from a command run
-	SnowflakeNodeId int64                                    // The id to use for the snowflake node
+	GuildID            string                                   // The ID of a guild to register commands to or empty for global
+	OnCommandError     func(err error, context *CommandContext) // The function that is fired when there is an error returned from a command run
+	SnowflakeNodeId    int64                                    // The id to use for the snowflake node
+	DependencyProvider Provider                                 // The dependency provider, useful for when youre using dependency injection
 }
 
 // Construct a new command manager
@@ -41,6 +46,7 @@ func New(session *discordgo.Session, options ...Options) (*Manager, error) {
 			log.Printf("%v command error: %v", context.Name, err)
 		},
 		SnowflakeNodeId: 1,
+		DependencyProvider: nil,
 	}
 
 	if len(options) > 0 {
@@ -54,6 +60,10 @@ func New(session *discordgo.Session, options ...Options) (*Manager, error) {
 
 		if options[0].SnowflakeNodeId != 0 {
 			manager.options.SnowflakeNodeId = options[0].SnowflakeNodeId
+		}
+
+		if options[0].DependencyProvider != nil {
+			manager.options.DependencyProvider = options[0].DependencyProvider
 		}
 	}
 

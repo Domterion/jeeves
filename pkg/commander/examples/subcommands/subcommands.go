@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/domterion/jeeves/commander"
+	"github.com/domterion/jeeves/pkg/commander"
 )
 
 var UserCommand commander.Command = commander.Command{

@@ -2,7 +2,7 @@ package checks
 
 import (
 	"github.com/bwmarrin/discordgo"
-	"github.com/domterion/jeeves/commander"
+	"github.com/domterion/jeeves/pkg/commander"
 )
 
 var PressCommand commander.Command = commander.Command{

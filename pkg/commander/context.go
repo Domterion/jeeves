@@ -26,6 +26,24 @@ type ComponentContext struct {
 	Member  *discordgo.Member            // The member object for the command caller
 }
 
+// Get a key from the dependency provider
+func (c *CommandContext) Get(key string) interface{} {
+	if c.Manager.options.DependencyProvider != nil {
+		return c.Manager.options.DependencyProvider.Get(key)
+	}
+
+	return nil
+}
+
+// Get a key from the dependency provider
+func (c *ComponentContext) Get(key string) interface{} {
+	if c.Manager.options.DependencyProvider != nil {
+		return c.Manager.options.DependencyProvider.Get(key)
+	}
+
+	return nil
+}
+
 // Respond to an interaction
 func (c *CommandContext) Respond(response *discordgo.InteractionResponse) error {
 	return c.Session.InteractionRespond(c.Event.Interaction, response)
