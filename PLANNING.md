@@ -46,7 +46,7 @@ The currency is specks or SPC but is also referred to as money, cash or currency
 
 # Devlopment Stages
 
-- [ ] Existance of characters
+- [ ] Life begins
     - All characters start to exist, all on one world. To coexist or to not is up to the players
     - No progress on ships yet but slowly we shall progress!
     - Very basic items will be found here 
