@@ -34,9 +34,31 @@
             - Money can be stolen by invaders
             - Used to purchase food, water, items, upgrades and various other things
             - Can be deposited into rocket safe for extra security
+    - Planets
+        - Planets that are harder to get to will have rarer loot
+        - More enemies to fight and gas to get there
 
 Enemies are sometimes referred to as invaders and will attack your ship to steal your money and fuel. You can fight them off and upgrade your rockets defenses to prevent entry
 
 Rocket ships can also be called rockets or ships
 
 The currency is specks or SPC but is also referred to as money, cash or currency
+
+# Devlopment Stages
+
+- [ ] Existance of characters
+    - All characters start to exist, all on one world. To coexist or to not is up to the players
+    - No progress on ships yet but slowly we shall progress!
+    - Very basic items will be found here 
+        - This is the starting planet... dont expect much
+    
+- [ ] Planets!
+    - More planets are starting to form, no players have access yet though
+    - We will start introducing planets and the idea of space exploration to the player
+    - They will also meet their AI helper, Jeeves
+        - Jeeves is here to guide and help, whether its defending your ship or helping you explore planets
+
+- [ ] Time for exploration
+    - Ships are now available, players can begin to explore other planets
+    - Players will quickly find that it is a challenge to hop between planets 
+    - They are now also exposed to higher tier loot 

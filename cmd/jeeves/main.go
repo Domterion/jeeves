@@ -75,8 +75,6 @@ func main() {
 	_ = container.Get(utils.DIDiscord).(*discordgo.Session)
 	_ = container.Get(utils.DICommander).(*commander.Manager)
 
-	log.Println("Starting!")
-
 	stop := make(chan os.Signal)
 	signal.Notify(stop, os.Interrupt)
 	<-stop

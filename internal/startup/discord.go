@@ -10,7 +10,7 @@ import (
 )
 
 func InitDiscord(container di.Container) (*discordgo.Session, error) {
-	config := container.Get(utils.DIDiscord).(*models.Config)
+	config := container.Get(utils.DIConfig).(*models.Config)
 
 	discord, err := discordgo.New("Bot " + config.Token)
 	if err != nil {
