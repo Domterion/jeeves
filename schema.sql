@@ -9,7 +9,7 @@ CREATE TABLE characters (
 
 CREATE TABLE items (
 	"id" BIGSERIAL PRIMARY KEY,
-	"owner" BIGINT NOT NULL REFERENCES characters("user" ON DELETE CASCADE,
+	"owner" BIGINT NOT NULL REFERENCES characters("user") ON DELETE CASCADE,
 	"equipped" BOOLEAN NOT NULL,
 	"name" VARCHAR(256) NOT NULL,
 	-- Value is either the damage or defense for the item
