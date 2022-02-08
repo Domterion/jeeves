@@ -1,12 +1,11 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+package models
 
-CREATE TABLE characters (
-    "user" BIGINT PRIMARY KEY,
-    "id" UUID DEFAULT uuid_generate_v4(),
-    "name" VARCHAR(32) UNIQUE NOT NULL,
-    "specks" BIGINT DEFAULT 50
-);
+import (
+	"github.com/uptrace/bun"
+	_ "github.com/uptrace/bun/driver/pgdriver"
+)
 
+/*
 CREATE TABLE items (
 	"id" BIGSERIAL PRIMARY KEY,
 	"owner" BIGINT NOT NULL,
@@ -22,7 +21,16 @@ CREATE TABLE items (
 	-- The rarity can be common, uncommon, rare or mythic
 	"rarity" VARCHAR(32) NOT NULL
 );
+*/
 
-CREATE INDEX items_id_idx ON "items" USING btree ("id");
+type Item struct {
+	bun.BaseModel `bun:"table:characters"`
 
-CREATE INDEX items_owner_idx ON "items" USING btree ("owner");
+	ID       int64  `bun:"id,type:bigserial,pk"`
+	Owner    string `bun:"owner,type:bigint"`
+	Name     string `bun:"name,type:varchar(256),notnull"`
+	Value    int64  `bun:"value,type:numeric(5,2),notnull"`
+	Category string `bun:"category,type:varchar(32),notnull"`
+	Slot     string `bun:"slot,type:varchar(32),notnull"`
+	Rarity   string `bun:"rarity,type:varchar(32),notnull"`
+}
