@@ -53,6 +53,9 @@ var CreateCommand commander.Command = commander.Command{
 							})
 						}
 
+						utils.InsertItem(database, context.Member.User.ID, true, "Common Space Helmet", 5.0, utils.HelmetCategory, utils.HeadSlot, utils.CommonRarity)
+						utils.InsertItem(database, context.Member.User.ID, true, "Common Saber", 5.0, utils.SaberCategory, utils.EquipmentSlot, utils.CommonRarity)
+
 						msg := `Your space exploration journey starts here!
 
 I am **Jeeves**, your captain! I'll help guide you through this journey. 

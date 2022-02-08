@@ -9,17 +9,18 @@ CREATE TABLE characters (
 
 CREATE TABLE items (
 	"id" BIGSERIAL PRIMARY KEY,
-	"owner" BIGINT NOT NULL,
+	"owner" BIGINT NOT NULL REFERENCES characters("user" ON DELETE CASCADE,
+	"equipped" BOOLEAN NOT NULL,
 	"name" VARCHAR(256) NOT NULL,
 	-- Value is either the damage or defense for the item
 	"value" NUMERIC(5, 2) NOT NULL,
-	-- The category can either be shield, saber, helmet, chestplate, leggings or boots
+	-- The category can either be shield, saber, helmet, chestplate, gloves, leggings or boots
 	"category" VARCHAR(32) NOT NULL,
 	-- The slot can be head, torso, legs, feet or equipment
 	-- equipment slot is for shields, sabers and the like
-	-- head, torso, legs and feet are for their respective coverings
+	-- head, torso, hands, legs and feet are for their respective coverings
 	"slot" VARCHAR(32) NOT NULL,
-	-- The rarity can be common, uncommon, rare or mythic
+	-- The rarity can be common, uncommon, rare, legendary and mythic
 	"rarity" VARCHAR(32) NOT NULL
 );
 
