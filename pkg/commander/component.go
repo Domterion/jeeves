@@ -2,6 +2,8 @@ package commander
 
 import "github.com/bwmarrin/discordgo"
 
+// TODO: Modal and Attachment types when discordgo adds them
+
 // A struct that all components must implement
 type BaseComponent struct {
 	CustomID string                                // A unique string to identify the component internally and with Discord

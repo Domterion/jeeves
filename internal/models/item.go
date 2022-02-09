@@ -24,7 +24,7 @@ CREATE TABLE items (
 */
 
 type Item struct {
-	bun.BaseModel `bun:"table:characters"`
+	bun.BaseModel `bun:"table:items"`
 
 	ID       int64   `bun:"id,type:bigserial,pk"`
 	Owner    string  `bun:"owner,type:bigint"`

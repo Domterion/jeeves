@@ -11,7 +11,7 @@ import (
 // Character Queries
 
 func GetCharacter(db *bun.DB, user string) (models.Character, error) {
-	character := models.Character{}
+	var character models.Character
 	err := db.NewSelect().Model(&character).Where("\"user\" = ?", user).Scan(context.Background())
 
 	return character, err
@@ -46,4 +46,12 @@ func InsertItem(db *bun.DB, owner string, equipped bool, name string, value floa
 	fmt.Printf("res: %v\n", res)
 
 	return err
+}
+
+func GetEquippedItems(db *bun.DB, owner string) ([]models.Item, error) {
+	var items []models.Item
+
+	err := db.NewSelect().Model(&items).Where("\"owner\" = ?", owner).Where("\"equipped\" = true").Scan(context.Background())
+
+	return items, err
 }

@@ -24,6 +24,4 @@ CREATE TABLE items (
 	"rarity" VARCHAR(32) NOT NULL
 );
 
-CREATE INDEX items_id_idx ON "items" USING btree ("id");
-
 CREATE INDEX items_owner_idx ON "items" USING btree ("owner");

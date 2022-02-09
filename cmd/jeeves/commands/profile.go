@@ -29,6 +29,39 @@ var ProfileCommand commander.Command = commander.Command{
 			database := context.Get(utils.DIDatabase).(*bun.DB)
 			character, _ := utils.GetCharacter(database, context.Member.User.ID)
 
+			// utils.InsertItem(database, context.Member.User.ID, true, utils.GetRandomItemName(utils.GlovesCategory, utils.MythicRarity), 100.0, utils.GlovesCategory, utils.HandsSlot, utils.MythicRarity)
+
+			items, _ := utils.GetEquippedItems(database, context.Member.User.ID)
+
+			var (
+				helmet     = "None"
+				chestplate = "None"
+				leggings   = "None"
+				boots      = "None"
+				gloves     = "None"
+				shield     = "None"
+				saber      = "None"
+			)
+
+			for _, item := range items {
+				switch item.Category {
+				case string(utils.HelmetCategory):
+					helmet = item.Name
+				case string(utils.ChestplateCateegory):
+					chestplate = item.Name
+				case string(utils.LeggingsCategory):
+					leggings = item.Name
+				case string(utils.BootsCategory):
+					boots = item.Name
+				case string(utils.GlovesCategory):
+					gloves = item.Name
+				case string(utils.ShieldCategory):
+					shield = item.Name
+				case string(utils.SaberCategory):
+					saber = item.Name
+				}
+			}
+
 			description := fmt.Sprintf(`**Name**: %s
 **Specks** (**SPC**): %d
 
@@ -40,11 +73,27 @@ var ProfileCommand commander.Command = commander.Command{
 				Description: description,
 			}
 
+			description = fmt.Sprintf(`**Helmet**: %s
+**Chestplate**: %s
+**Leggings**: %s
+**Boots**: %s
+**Gloves**: %s
+
+**Shield**: %s
+**Saber**: %s
+`, helmet, chestplate, leggings, boots, gloves, shield, saber)
+
+			equipped := discordgo.MessageEmbed{
+				Title:       "Equipped",
+				Description: description,
+			}
+
 			return context.Respond(&discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseChannelMessageWithSource,
 				Data: &discordgo.InteractionResponseData{
 					Embeds: []*discordgo.MessageEmbed{
 						&embed,
+						&equipped,
 					},
 				},
 			})
