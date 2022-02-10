@@ -13,4 +13,5 @@ type Character struct {
 	ID     uuid.UUID `bun:"id,type:uuid,default:uuid_generate_v4()"`
 	Name   string    `bun:"name,type:varchar(32),notnull,unique"`
 	Specks int64     `bun:"specks,type:bigint,default:0"`
+	Planet string    `bun:"planet,type:varchar(32),notnull"`
 }

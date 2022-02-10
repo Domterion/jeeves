@@ -47,7 +47,7 @@ var ProfileCommand commander.Command = commander.Command{
 				switch item.Category {
 				case string(utils.HelmetCategory):
 					helmet = item.Name
-				case string(utils.ChestplateCateegory):
+				case string(utils.ChestplateCategory):
 					chestplate = item.Name
 				case string(utils.LeggingsCategory):
 					leggings = item.Name
@@ -64,9 +64,10 @@ var ProfileCommand commander.Command = commander.Command{
 
 			description := fmt.Sprintf(`**Name**: %s
 **Specks** (**SPC**): %d
+**Planet**: %s
 
 **ID**: %s
-`, character.Name, character.Specks, character.ID)
+`, character.Name, character.Specks, character.Planet, character.ID)
 
 			embed := discordgo.MessageEmbed{
 				Title:       "Profile",

@@ -12,16 +12,15 @@ import (
 func InitDiscord(container di.Container) (*discordgo.Session, error) {
 	config := container.Get(utils.DIConfig).(*models.Config)
 
-	discord, err := discordgo.New("Bot " + config.Token)
-	if err != nil {
-		return nil, err
-	}
+	discord := container.Get(utils.DIDiscord).(*discordgo.Session)
+
+	discord.Token = "Bot " + config.Token
 
 	discord.AddHandler(func(s *discordgo.Session, e *discordgo.Ready) {
 		log.Println("Bot is ready!")
 	})
 
-	err = discord.Open()
+	err := discord.Open()
 	if err != nil {
 		return nil, err
 	}

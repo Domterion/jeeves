@@ -4,6 +4,7 @@ CREATE TABLE characters (
     "user" BIGINT PRIMARY KEY,
     "id" UUID DEFAULT uuid_generate_v4(),
     "name" VARCHAR(32) UNIQUE NOT NULL,
+	"planet" VARCHAR(32) UNIQUE NOT NULL,
     "specks" BIGINT DEFAULT 50
 );
 

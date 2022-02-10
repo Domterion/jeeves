@@ -44,7 +44,7 @@ var CreateCommand commander.Command = commander.Command{
 						name := context.Event.ApplicationCommandData().Options[0].StringValue()
 
 						database := context.Get(utils.DIDatabase).(*bun.DB)
-						err := utils.InsertCharacter(database, context.Member.User.ID, name, 0)
+						err := utils.InsertCharacter(database, context.Member.User.ID, name, 0, utils.EarthPlanet)
 
 						if err != nil {
 							return context.ResponseEdit(&discordgo.WebhookEdit{

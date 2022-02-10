@@ -12,6 +12,7 @@ var commandSlice = []commander.Command{commands.CreateCommand, commands.ProfileC
 
 func InitCommander(container di.Container) (*commander.Manager, error) {
 	discord := container.Get(utils.DIDiscord).(*discordgo.Session)
+
 	commander, err := commander.New(discord, commander.Options{
 		GuildID:            "897619857187676210",
 		DependencyProvider: container,

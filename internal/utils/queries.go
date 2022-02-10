@@ -2,7 +2,6 @@ package utils
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/domterion/jeeves/internal/models"
 	"github.com/uptrace/bun"
@@ -17,11 +16,12 @@ func GetCharacter(db *bun.DB, user string) (models.Character, error) {
 	return character, err
 }
 
-func InsertCharacter(db *bun.DB, user string, name string, specks int64) error {
+func InsertCharacter(db *bun.DB, user string, name string, specks int64, planet PlanetType) error {
 	character := models.Character{
 		User:   user,
 		Name:   name,
 		Specks: specks,
+		Planet: string(planet),
 	}
 	_, err := db.NewInsert().Model(&character).ExcludeColumn("id").Exec(context.Background())
 
@@ -30,7 +30,7 @@ func InsertCharacter(db *bun.DB, user string, name string, specks int64) error {
 
 // Item Queries
 
-func InsertItem(db *bun.DB, owner string, equipped bool, name string, value float64, category CategoryType, slot SlotType, rarity RarityType) error {
+func InsertItem(db *bun.DB, owner string, equipped bool, name string, value float64, category CategoryType, slot SlotType, rarity RarityType) (*models.Item, error) {
 	item := models.Item{
 		Owner:    owner,
 		Equipped: equipped,
@@ -41,11 +41,10 @@ func InsertItem(db *bun.DB, owner string, equipped bool, name string, value floa
 		Rarity:   string(rarity),
 	}
 
-	res, err := db.NewInsert().Model(&item).ExcludeColumn("id").Returning("*").Exec(context.Background())
+	var returned models.Item
+	_, err := db.NewInsert().Model(&item).ExcludeColumn("id").Returning("*").Exec(context.Background(), &returned)
 
-	fmt.Printf("res: %v\n", res)
-
-	return err
+	return &returned, err
 }
 
 func GetEquippedItems(db *bun.DB, owner string) ([]models.Item, error) {
