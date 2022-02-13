@@ -30,7 +30,7 @@ func InsertCharacter(db *bun.DB, user string, name string, specks int64, planet 
 
 // Item Queries
 
-func InsertItem(db *bun.DB, owner string, equipped bool, name string, value float64, category CategoryType, slot SlotType, rarity RarityType) (*models.Item, error) {
+func InsertItem(db *bun.DB, owner string, equipped bool, name string, value float64, category CategoryType, slot SlotType, tier TierType) (*models.Item, error) {
 	item := models.Item{
 		Owner:    owner,
 		Equipped: equipped,
@@ -38,7 +38,7 @@ func InsertItem(db *bun.DB, owner string, equipped bool, name string, value floa
 		Value:    value,
 		Category: string(category),
 		Slot:     string(slot),
-		Rarity:   string(rarity),
+		Tier:   string(tier),
 	}
 
 	var returned models.Item

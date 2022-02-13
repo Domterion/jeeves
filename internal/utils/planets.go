@@ -10,57 +10,58 @@ const (
 
 type Planet struct {
 	Difficulty int
-	Loot       map[CategoryType][]RarityType // The loot table is a map of categories to a slice of rarities that can be found on that planet
+	Loot       map[CategoryType][]TierType // The loot table is a map of categories to a slice of tiers that can be found on that planet
+	Enemies    []Enemy
 }
 
-func (p *Planet) GetRandomRarity(category CategoryType) RarityType {
-	var rarities []RarityType
+type Enemy struct {
+	Name   string
+	Health int
+	Damage int
+	Armor  int
+}
 
-	for _, rarity := range p.Loot[category] {
-		chance := int(RarityChances[rarity])
+func (p *Planet) GetRandomRarity(category CategoryType) TierType {
+	var tiers []TierType
+
+	for _, tier := range p.Loot[category] {
+		chance := int(TierChances[tier])
 		for i := 0; i < chance; i++ {
-			rarities = append(rarities, rarity)
+			tiers = append(tiers, tier)
 		}
 	}
 
-	randomIndex := rand.Intn(len(rarities))
-	rarity := rarities[randomIndex]
+	randomIndex := rand.Intn(len(tiers))
+	tier := tiers[randomIndex]
 
-	return rarity
+	return tier
 }
 
 var (
 	Earth = Planet{
 		Difficulty: 0,
-		Loot: map[CategoryType][]RarityType{
+		Loot: map[CategoryType][]TierType{
 			ShieldCategory: {
-				CommonRarity,
+				DTier,
 			},
 			SaberCategory: {
-				CommonRarity,
+				DTier,
 			},
 			HelmetCategory: {
-				CommonRarity,
+				DTier,
 			},
 			ChestplateCategory: {
-				CommonRarity,
+				DTier,
 			},
 			GlovesCategory: {
-				CommonRarity,
+				DTier,
 			},
 			BootsCategory: {
-				CommonRarity, UncommonRarity, RareRarity, LegendaryRarity, MythicRarity,
+				DTier, CTier, BTier, ATier, STier, SPlusTier,
 			},
 		},
+		Enemies: []Enemy{},
 	}
 )
 
-/*
-
-Each planet should have a few stats:
-
-Difficulty : The overall difficulty of the planet, to include the enemies and the challenge to get there
-Loot       : The loot table for the planet, the possible loot and kinds
-Enemies    : *wink*
-
-*/
+var Planets = map[PlanetType]Planet{EarthPlanet: Earth}

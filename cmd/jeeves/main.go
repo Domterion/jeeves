@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -78,39 +77,6 @@ func main() {
 	_ = container.Get(utils.DICommander).(*commander.Manager)
 
 	startup.InitDiscord(container)
-
-	occurrences := map[utils.RarityType]int{
-		utils.CommonRarity:    0,
-		utils.UncommonRarity:  0,
-		utils.RareRarity:      0,
-		utils.LegendaryRarity: 0,
-		utils.MythicRarity:    0,
-	}
-
-	const iters = 100000
-
-	for i := 0; i < iters; i++ {
-		o := utils.Earth.GetRandomRarity(utils.BootsCategory)
-		occurrences[o] += 1
-	}
-
-	fmt.Printf(`Iters: %d
-Chances:
-Common: %d
-Uncommon: %d
-Rare: %d
-Legendary: %d
-Mythic: %d
-
-Occurrences:
--
-Common: %d
-Uncommon: %d
-Rare: %d
-Legendary: %d
-Mythic: %d	
-`, iters, utils.CommonRarityChance, utils.UncommonRarityChance, utils.RareRarityChance, utils.LegendaryRarityChance, utils.MythicRarityChance,
-		occurrences[utils.CommonRarity], occurrences[utils.UncommonRarity], occurrences[utils.RareRarity], occurrences[utils.LegendaryRarity], occurrences[utils.MythicRarity])
 
 	stop := make(chan os.Signal)
 	signal.Notify(stop, os.Interrupt)

@@ -15,5 +15,5 @@ type Item struct {
 	Value    float64 `bun:"value,type:numeric(5,2),notnull"`
 	Category string  `bun:"category,type:varchar(32),notnull"`
 	Slot     string  `bun:"slot,type:varchar(32),notnull"`
-	Rarity   string  `bun:"rarity,type:varchar(32),notnull"`
+	Tier     string  `bun:"tier,type:varchar(32),notnull"`
 }

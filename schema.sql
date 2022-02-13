@@ -21,8 +21,8 @@ CREATE TABLE items (
 	-- equipment slot is for shields, sabers and the like
 	-- head, torso, hands, legs and feet are for their respective coverings
 	"slot" VARCHAR(32) NOT NULL,
-	-- The rarity can be common, uncommon, rare, legendary and mythic
-	"rarity" VARCHAR(32) NOT NULL
+	-- The tier can be d, c, b, a, s and s+
+	"tier" VARCHAR(32) NOT NULL
 );
 
 CREATE INDEX items_owner_idx ON "items" USING btree ("owner");
