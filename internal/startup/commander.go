@@ -14,7 +14,7 @@ func InitCommander(container di.Container) (*commander.Manager, error) {
 	discord := container.Get(utils.DIDiscord).(*discordgo.Session)
 
 	commander, err := commander.New(discord, commander.Options{
-		GuildID:            "897619857187676210",
+		GuildID:            "942410129742135317",
 		DependencyProvider: container,
 	})
 
